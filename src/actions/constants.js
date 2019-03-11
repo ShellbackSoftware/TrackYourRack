@@ -11,3 +11,7 @@ export const LOGOUT_USER = 'logout_user';
 
 // Home page
 export const SELECT_LIST = 'select_list';
+
+// Polish stuff
+export const ALL_POLISHES = 'all_polishes';
+export const START_API_CALL = 'start_api_call';

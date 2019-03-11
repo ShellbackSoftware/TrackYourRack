@@ -28,8 +28,8 @@ const DrawerNav = createDrawerNavigator(
   },
   {
     contentComponent: SideMenu,
+    headerMode: 'none',
     navigationOptions: {
-      headerMode: 'none',
       headerLeft: null
     }
   }
@@ -44,9 +44,10 @@ const AuthStack = createStackNavigator(
   },
   {
     initialRouteName: 'Auth',
+    headerMode: 'none',
     navigationOptions: {
-      headerRight: null,
       headerLeft: null,
+      headerRight: null
     }
   }
 );
