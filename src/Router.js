@@ -1,0 +1,106 @@
+import React from 'react';
+import {
+    createStackNavigator,
+    createAppContainer,
+    createDrawerNavigator
+  } from 'react-navigation';
+import { HeaderMenuButton } from './components/common';
+import SideMenu from './components/SideMenu/SideMenu';
+import NavigationService from './components/helpers/NavigationService';
+import {
+  HomeScreen,
+  LoginScreen,
+  PolishListScreen,
+  AuthLoadingScreen,
+  ProfileScreen,
+  FollowingScreen,
+  ChatScreen,
+  ScannerScreen
+} from './components/screens';
+
+const DrawerNav = createDrawerNavigator(
+  {
+    Home: HomeScreen,
+    Profile: ProfileScreen,
+    Following: FollowingScreen,
+    Chat: ChatScreen,
+    Scanner: ScannerScreen,
+  },
+  {
+    contentComponent: SideMenu,
+    navigationOptions: {
+      headerMode: 'none',
+      headerLeft: null
+    }
+  }
+);
+
+const AuthStack = createStackNavigator(
+  {
+    Auth: AuthLoadingScreen,
+    Login: LoginScreen,
+    // Register
+    // Forgot password
+  },
+  {
+    initialRouteName: 'Auth',
+    navigationOptions: {
+      headerRight: null,
+      headerLeft: null,
+    }
+  }
+);
+
+const MainStack = createStackNavigator(
+  {
+    PolishList: PolishListScreen,
+  },
+  {
+    headerMode: 'none'
+  }
+);
+
+const RootStack = createStackNavigator(
+  {
+    loginFlow: {
+      screen: AuthStack,
+    },
+    mainFlow: {
+      screen: DrawerNav,
+    },
+    polishFlow: {
+      screen: MainStack,
+    },
+  },
+  {
+    initialRouteName: 'loginFlow',
+    defaultNavigationOptions: {
+      headerStyle: {
+        backgroundColor: '#f4511e'
+      },
+      headerTintColor: '#fff',
+      headerTitleStyle: {
+        fontWeight: 'bold'
+      },
+      headerRight: (
+        <HeaderMenuButton
+        onPress={() => NavigationService.toggleDrawer()}
+        />
+      ),
+    }
+  }
+);
+
+const AppContainer = createAppContainer(RootStack);
+
+export default class Router extends React.Component {
+  render() {
+    return (
+      <AppContainer
+      ref={navigatorRef => {
+        NavigationService.setTopLevelNavigator(navigatorRef);
+      }}
+      />
+    );
+  }
+}
