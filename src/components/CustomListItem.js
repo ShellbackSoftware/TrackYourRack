@@ -2,7 +2,7 @@ import React from 'react';
 import {
       Text,
       StyleSheet,
-      TouchableWithoutFeedback,
+      TouchableOpacity,
       View
       } from 'react-native';
 import NavigationService from '../components/helpers/NavigationService';
@@ -17,7 +17,7 @@ class CustomListItem extends React.Component {
   render() {
     const { listName } = this.props.customList.item;
     return (
-      <TouchableWithoutFeedback
+      <TouchableOpacity
         onPress={this.onRowPress.bind(this)}
       >
         <View>
@@ -27,7 +27,7 @@ class CustomListItem extends React.Component {
           </Text>
         </CardSection>
         </View>
-      </TouchableWithoutFeedback>
+      </TouchableOpacity>
     );
   }
 }

@@ -36,6 +36,7 @@ class PolishListScreen extends React.Component {
           <Text>Search bar</Text>
         </CardSection>
         <FlatList
+          windowSize={1}
           data={this.props.allPolishes}
           renderItem={this.renderItem}
           keyExtractor={polish => polish.pID}

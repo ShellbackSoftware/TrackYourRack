@@ -2,13 +2,23 @@ import React from 'react';
 import {
       Text,
       StyleSheet,
-      TouchableWithoutFeedback,
-      View
+      TouchableOpacity,
+      View,
+      Image
       } from 'react-native';
+import {
+  SWATCH_PATH,
+  DEFAULT_SWATCH
+} from '../../../actions/constants';
 //import NavigationService from '../../helpers/NavigationService';
+import SinglePolishFull from './SinglePolishFull';
 import { CardSection } from '../../common';
 
 class PolishListItem extends React.Component {
+  state = {
+    showModal: false,
+  };
+
   onRowPress() {
     //const polish = this.props.polishItem;
     //NavigationService.navigate('SinglePolish', { polish });
@@ -16,20 +26,52 @@ class PolishListItem extends React.Component {
     NavigationService.navigate('PolishList', { listName });*/
   }
 
-  render() {
+  toggleModal() {
+    this.setState({ showModal: !this.state.showModal });
+  }
+
+  renderRow() {
+    const { thumbnailStyle, titleStyle, tContainerStyle } = styles;
     const polish = this.props.polishItem;
+    if (polish.filename && polish.filename !== '') {
+      polish.path = SWATCH_PATH + polish.filename;
+    } else {
+      polish.path = DEFAULT_SWATCH;
+    }
+
     return (
-      <TouchableWithoutFeedback
-        onPress={this.onRowPress.bind(this)}
+      <CardSection>
+        <View style={tContainerStyle}>
+          <Image
+            style={thumbnailStyle}
+            source={{ uri: polish.path }}
+          />
+        </View>
+          <Text style={titleStyle}>
+          {polish.pName} {'\n'}
+          {polish.pBrand}
+        </Text>
+      </CardSection>
+    );
+  }
+
+  render() {
+    return (
+      <View>
+      <TouchableOpacity
+        onPress={this.toggleModal.bind(this)}
       >
         <View>
-          <CardSection>
-          <Text style={styles.titleStyle}>
-            {polish.pName}
-          </Text>
-        </CardSection>
+         {this.renderRow()}
         </View>
-      </TouchableWithoutFeedback>
+      </TouchableOpacity>
+
+      <SinglePolishFull
+        visible={this.state.showModal}
+        polish={this.props.polishItem}
+        closeModal={this.toggleModal.bind(this)}
+      />
+      </View>
     );
   }
 }
@@ -37,7 +79,17 @@ class PolishListItem extends React.Component {
 const styles = StyleSheet.create({
   titleStyle: {
     fontSize: 18,
-    paddingLeft: 15
+    paddingLeft: 10,
+    flexDirection: 'column'
+  },
+  thumbnailStyle: {
+    padding: 5,
+    width: 50,
+    height: 50
+  },
+  tContainerStyle: {
+    borderRadius: 10,
+    overflow: 'hidden'
   }
 });
 

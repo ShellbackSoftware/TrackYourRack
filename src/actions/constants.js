@@ -1,4 +1,6 @@
 export const SITE_BASE = 'https://d8.shellbacksoftware.com';
+export const SWATCH_PATH = `${SITE_BASE}/sites/default/files/swatches/`;
+export const DEFAULT_SWATCH = `${SITE_BASE}/sites/default/files/default_images/default_polish.jpg`;
 
 // Authentication stuff
 export const USERNAME_CHANGED = 'username_changed';
