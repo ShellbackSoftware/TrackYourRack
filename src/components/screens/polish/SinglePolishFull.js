@@ -81,13 +81,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   imageStyle: {
-    width: 300,
+    flex: 1,
+    width: 200,
     height: 300
   },
   iContainerStyle: {
+    flex: 1,
     borderRadius: 10,
     overflow: 'hidden',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    flexDirection: 'row'
   }
 });
 

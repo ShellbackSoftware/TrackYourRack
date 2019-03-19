@@ -14,7 +14,7 @@ import {
 import SinglePolishFull from './SinglePolishFull';
 import { CardSection } from '../../common';
 
-class PolishListItem extends React.Component {
+class PolishListItem extends React.PureComponent {
   state = {
     showModal: false,
   };
@@ -34,7 +34,7 @@ class PolishListItem extends React.Component {
     const { thumbnailStyle, titleStyle, tContainerStyle } = styles;
     const polish = this.props.polishItem;
     if (polish.filename && polish.filename !== '') {
-      polish.path = SWATCH_PATH + polish.filename;
+      polish.path = SWATCH_PATH + encodeURI(polish.filename);
     } else {
       polish.path = DEFAULT_SWATCH;
     }

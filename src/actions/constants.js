@@ -17,3 +17,5 @@ export const SELECT_LIST = 'select_list';
 // Polish stuff
 export const ALL_POLISHES = 'all_polishes';
 export const START_API_CALL = 'start_api_call';
+export const GET_LIST_CONTENT = 'get_list_content';
+export const GET_LISTS = 'get_lists';

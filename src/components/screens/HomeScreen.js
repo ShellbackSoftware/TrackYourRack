@@ -1,26 +1,41 @@
 import React from 'react';
 import { Text, StyleSheet, BackHandler } from 'react-native';
 import { connect } from 'react-redux';
-import { Card, CardSection } from '../common';
+import { getUserLists } from '../../actions';
+import { Card, CardSection, Spinner } from '../common';
 import CustomListsList from '../CustomListsList';
 
 class HomeScreen extends React.Component {
-  componentWillMount() {
+  componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    this.subs = [
+      this.props.navigation.addListener('didFocus', (payload) => this.componentDidFocus(payload)),
+    ];
   }
 
   componentWillUnmount() {
-      BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    this.subs.forEach(sub => sub.remove());
+  }
+
+  componentDidFocus() {
+    this.props.getUserLists(this.props.uid);
   }
 
   handleBackButtonClick = () => {
     return true;
   }
 
+  renderLists() {
+    if (this.props.loadingLists) {
+      return <Spinner />;
+    }
+    return <CustomListsList />;
+  }
+
   render() {
     // eslint-disable-next-line
     const { containerStyle } = styles;
-
     return (
       <Card>
         <CardSection>
@@ -29,7 +44,7 @@ class HomeScreen extends React.Component {
         </CardSection>
 
         <CardSection>
-          <CustomListsList />
+          {this.renderLists()}
         </CardSection>
       </Card>
     );
@@ -43,8 +58,9 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  const { username, error, loading, uid, token } = state.auth;
-  return { username, error, loading, uid, token };
+  const { username, uid } = state.auth;
+  const { loadingLists } = state.lists;
+  return { username, loadingLists, uid };
 };
 
-export default connect(mapStateToProps, {})(HomeScreen);
+export default connect(mapStateToProps, { getUserLists })(HomeScreen);

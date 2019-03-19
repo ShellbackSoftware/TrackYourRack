@@ -10,12 +10,12 @@ import { CardSection } from './common';
 
 class CustomListItem extends React.Component {
   onRowPress() {
-    const { listName } = this.props.customList.item;
-    NavigationService.navigate('PolishList', { listName });
+    const { listname, listID } = this.props.customList.item;
+    NavigationService.navigate('PolishList', { listname, listID });
   }
 
   render() {
-    const { listName } = this.props.customList.item;
+    const { listname } = this.props.customList.item;
     return (
       <TouchableOpacity
         onPress={this.onRowPress.bind(this)}
@@ -23,7 +23,7 @@ class CustomListItem extends React.Component {
         <View>
           <CardSection>
           <Text style={styles.titleStyle}>
-            {listName}
+            {listname}
           </Text>
         </CardSection>
         </View>
