@@ -77,7 +77,7 @@ const RootStack = createStackNavigator(
     initialRouteName: 'loginFlow',
     defaultNavigationOptions: {
       headerStyle: {
-        backgroundColor: '#f4511e'
+        backgroundColor: '#00BCD6'
       },
       headerTintColor: '#fff',
       headerTitleStyle: {

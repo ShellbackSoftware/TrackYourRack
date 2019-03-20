@@ -1,19 +1,20 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { Icon } from 'react-native-elements';
 
 const HeaderMenuButton = ({ onPress }) => {
     const { buttonStyle } = styles;
 
     return (
-      <TouchableOpacity onPress={onPress}>
         <Icon
           raised
           name='bars'
           type='font-awesome'
-          style={buttonStyle}
+          containerStyle={buttonStyle}
+          onPress={onPress}
+          underlayColor={'#CCDD1F'}
+          color='#00BCD6'
         />
-      </TouchableOpacity>
     );
 };
 
@@ -22,10 +23,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-end',
         alignSelf: 'stretch',
-        backgroundColor: '#fff',
-        borderRadius: 5,
-        borderWidth: 1,
-        borderColor: '#007AFF',
+        bottom: 0,
         marginLeft: 5,
         marginRight: 5
     }

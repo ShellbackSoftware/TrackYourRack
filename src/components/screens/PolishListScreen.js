@@ -6,7 +6,7 @@ import {
   Text,
   View,
   StyleSheet,
-  TouchableOpacity
+  //TouchableOpacity
   } from 'react-native';
 import { Icon, SearchBar } from 'react-native-elements';
 import { connect } from 'react-redux';
@@ -26,7 +26,6 @@ class PolishListScreen extends React.Component {
       listid: this.props.navigation.getParam('listID', null)
     };
     if (this.state.listid > 0) {
-      console.log(`List ID:${this.state.listid}`);
       this.props.getPolishList(this.state.listid);
     } else {
       this.state = { polishes: this.props.allPolishes };
@@ -53,13 +52,12 @@ class PolishListScreen extends React.Component {
 
   getListContent() {
     const { allPolishes, curPolishes } = this.props;
-    console.log(`Cur polishes: ${curPolishes.length}`);
     const polishes = _.intersectionBy(allPolishes, curPolishes, 'pID');
     this.setState({ polishes });
   }
 
   scrollToTop() {
-    console.log('Scroll');
+    this.flatListRef.scrollToIndex({ animated: true, index: 0 });
   }
 
   loadMoreRows() {
@@ -81,6 +79,8 @@ class PolishListScreen extends React.Component {
   renderHeader() {
     return (
       <SearchBar
+        inputStyle={styles.searchInputStyle}
+        containerStyle={styles.searchContainerStyle}
         placeholder="Search For Polish . . ."
         lightTheme
         round
@@ -96,24 +96,26 @@ class PolishListScreen extends React.Component {
 
   renderScrollButton() {
     return (
-      <TouchableOpacity onPress={this.scrollToTop.bind(this)}>
         <Icon
           raised
           name='angle-double-up'
           type='font-awesome'
-          style={styles.buttonStyle}
+          containerStyle={styles.buttonStyle}
+          onPress={this.scrollToTop.bind(this)}
+          underlayColor={'#00BCD6'}
+          color='#00BCD6'
         />
-      </TouchableOpacity>
     );
   }
 
-  renderPage() {
+  render() {
     if (this.props.loadingPolish) {
       return (
         <View>
           <CardSection>
             <Text>Loading polishes, please wait . . .</Text>
           </CardSection>
+
           <CardSection>
             <Spinner size="large" />
           </CardSection>
@@ -122,47 +124,47 @@ class PolishListScreen extends React.Component {
     }
 
     return (
-        <View
-        style={styles.containerStyle}
-        >
-        <CardSection>
-        <FlatList
-          data={this.state.polishes}
-          renderItem={this.renderItem}
-          keyExtractor={polish => polish.pID}
-          initialNumToRender={50}
-          removeClippedSubviews
-          ListHeaderComponent={this.renderHeader}
-          extraData={this.state}
-        />
-        </CardSection>
-      </View>
-    );
-  }
 
-  render() {
-    return (
-      <Card>
-          {this.renderPage()}
-      </Card>
+        <Card style={{ flex: 1 }}>
+          <CardSection>
+            {this.renderHeader()}
+          </CardSection>
+
+          <CardSection style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-end' }}>
+            <FlatList
+              ref={(ref) => { this.flatListRef = ref; }}
+              data={this.state.polishes}
+              renderItem={this.renderItem}
+              keyExtractor={polish => polish.pID}
+              initialNumToRender={50}
+              removeClippedSubviews
+              extraData={this.state}
+            />
+
+        {this.renderScrollButton()}
+          </CardSection>
+        </Card>
+
     );
   }
 }
 
 const styles = StyleSheet.create({
   containerStyle: {
-    justifyContent: 'center',
-    alignItems: 'center'
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'flex-end'
   },
   buttonStyle: {
-      justifyContent: 'flex-end',
-      flexDirection: 'row',
-      backgroundColor: '#fff',
-      borderRadius: 5,
-      borderWidth: 1,
-      borderColor: '#007AFF',
-      marginLeft: 5,
-      marginRight: 5
+    position: 'absolute',
+    right: 0,
+    bottom: 0
+  },
+  searchInputStyle: {
+
+  },
+  searchContainerStyle: {
+    flex: 1
   }
 });
 
