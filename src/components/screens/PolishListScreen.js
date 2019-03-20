@@ -1,15 +1,20 @@
-/* eslint-disable no-underscore-dangle, no-param-reassign */
+/* eslint-disable no-underscore-dangle */
 import _ from 'lodash';
 import React from 'react';
-import { FlatList,
+import {
+  FlatList,
   Text,
   View,
   StyleSheet,
   TouchableOpacity
   } from 'react-native';
-import { Icon } from 'react-native-elements';
+import { Icon, SearchBar } from 'react-native-elements';
 import { connect } from 'react-redux';
-import { getAllPolishes, getPolishList } from '../../actions';
+import {
+  getPolishList,
+  clearPolishState,
+  finishPolishList
+  } from '../../actions';
 import { Card, CardSection, Spinner } from '../common';
 import PolishListItem from './polish/PolishListItem';
 
@@ -20,19 +25,35 @@ class PolishListScreen extends React.Component {
       customList: false,
       listid: this.props.navigation.getParam('listID', null)
     };
-    this.props.getAllPolishes();
-    this.props.getPolishList(this.state.listid);
-  }
+    if (this.state.listid > 0) {
+      console.log(`List ID:${this.state.listid}`);
+      this.props.getPolishList(this.state.listid);
+    } else {
+      this.state = { polishes: this.props.allPolishes };
+    }
+   }
 
   componentDidMount() {
     if (this.state.listid > 0) {
       this.setState({ customList: true });
+    } else {
+      this.props.finishPolishList();
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if ((this.props.curPolishes !== prevProps.curPolishes) && (this.state.listid > 0)) {
       this.getListContent();
     }
   }
 
- getListContent() {
+  componentWillUnmount() {
+    this.props.clearPolishState();
+  }
+
+  getListContent() {
     const { allPolishes, curPolishes } = this.props;
+    console.log(`Cur polishes: ${curPolishes.length}`);
     const polishes = _.intersectionBy(allPolishes, curPolishes, 'pID');
     this.setState({ polishes });
   }
@@ -43,6 +64,30 @@ class PolishListScreen extends React.Component {
 
   loadMoreRows() {
     console.log('End reached');
+  }
+
+  searchFilterFunction() {
+    /*
+    const newData = this.arrayholder.filter(item => {
+      const itemData = `${item.pName.toUpperCase()}
+      ${item.pBrand.toUpperCase()}`;
+       const textData = text.toUpperCase();
+
+       return itemData.indexOf(textData) > -1;
+    });
+    this.setState({ polishes: newData });*/
+  }
+
+  renderHeader() {
+    return (
+      <SearchBar
+        placeholder="Search For Polish . . ."
+        lightTheme
+        round
+        onChangeText={text => this.searchFilterFunction(text)}
+        autoCorrect={false}
+      />
+    );
   }
 
   renderItem(polishList) {
@@ -81,35 +126,17 @@ class PolishListScreen extends React.Component {
         style={styles.containerStyle}
         >
         <CardSection>
-          <Text style={{ flex: 1 }}>Search bar</Text>
-        </CardSection>
-        <CardSection>
-          {this.renderList()}
-        </CardSection>
-      </View>
-    );
-  }
-
-  renderList() {
-    if (this.state.customList) {
-      return (
         <FlatList
           data={this.state.polishes}
           renderItem={this.renderItem}
           keyExtractor={polish => polish.pID}
           initialNumToRender={50}
           removeClippedSubviews
+          ListHeaderComponent={this.renderHeader}
+          extraData={this.state}
         />
-      );
-    }
-    return (
-      <FlatList
-        data={this.props.allPolishes}
-        renderItem={this.renderItem}
-        keyExtractor={polish => polish.pID}
-        initialNumToRender={50}
-        removeClippedSubviews
-      />
+        </CardSection>
+      </View>
     );
   }
 
@@ -145,4 +172,6 @@ const mapStateToProps = state => {
   return { loadingPolish, uid, token, allPolishes, curPolishes };
 };
 
-export default connect(mapStateToProps, { getAllPolishes, getPolishList })(PolishListScreen);
+export default connect(mapStateToProps, {
+  getPolishList, clearPolishState, finishPolishList
+})(PolishListScreen);

@@ -2,7 +2,9 @@ import {
   SITE_BASE,
   ALL_POLISHES,
   START_API_CALL,
-  GET_LIST_CONTENT
+  GET_LIST_CONTENT,
+  CLEAR_POLISH_STATE,
+  FINISH_POLISH_LIST
 } from './constants';
 
 export const getAllPolishes = () => {
@@ -42,5 +44,18 @@ export const getPolishList = (listid) => {
         payload: resData
       });
     });
+  };
+};
+
+export const finishPolishList = () => {
+  return (dispatch) => {
+    dispatch({ type: FINISH_POLISH_LIST });
+  };
+};
+
+
+export const clearPolishState = () => {
+  return (dispatch) => {
+    dispatch({ type: CLEAR_POLISH_STATE });
   };
 };

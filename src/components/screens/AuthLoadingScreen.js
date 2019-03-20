@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { SecureStore } from 'expo';
 import NavigationService from '../helpers/NavigationService';
 import { Card, CardSection, Spinner } from '../common';
-import { authenticateUser } from '../../actions';
+import { authenticateUser, getAllPolishes } from '../../actions';
 
 class AuthLoadingScreen extends React.Component {
   constructor(props) {
@@ -21,7 +21,8 @@ class AuthLoadingScreen extends React.Component {
       .then(username => this.setState({ username }));
     const uidPromise = SecureStore.getItemAsync('uid')
       .then(uid => this.setState({ uid }));
-    Promise.all([tokenPromise, namePromise, uidPromise])
+    const polishesPromise = this.props.getAllPolishes();
+    Promise.all([tokenPromise, namePromise, uidPromise, polishesPromise])
     .then(() => {
       const userObj = {
         username: this.state.username,
@@ -56,4 +57,4 @@ const mapStateToProps = state => {
   return { username, uid, token };
 };
 
-export default connect(mapStateToProps, { authenticateUser })(AuthLoadingScreen);
+export default connect(mapStateToProps, { authenticateUser, getAllPolishes })(AuthLoadingScreen);

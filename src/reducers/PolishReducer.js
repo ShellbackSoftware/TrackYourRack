@@ -1,11 +1,13 @@
 import {
   ALL_POLISHES,
   START_API_CALL,
-  GET_LIST_CONTENT
+  GET_LIST_CONTENT,
+  CLEAR_POLISH_STATE,
+  FINISH_POLISH_LIST
  } from '../actions/constants';
 
 const INITIAL_STATE = {
-  loadingPolish: false,
+  loadingPolish: true,
   allPolishes: [],
   curPolishes: []
 };
@@ -19,6 +21,10 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, curPolishes: info, loadingPolish: false };
     case ALL_POLISHES:
       return { ...state, allPolishes: info, loadingPolish: false };
+    case CLEAR_POLISH_STATE:
+      return { ...state, curPolishes: [] };
+    case FINISH_POLISH_LIST:
+    return { ...state, loadingPolish: false };
     default:
       return state;
  }

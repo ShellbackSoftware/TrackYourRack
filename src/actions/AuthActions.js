@@ -86,7 +86,7 @@ const loginUserSuccess = (dispatch, user) => {
     const namePromise = SecureStore.setItemAsync('username', user.current_user.name);
     const uidPromise = SecureStore.setItemAsync('uid', user.current_user.uid);
     Promise.all([tokenPromise, namePromise, uidPromise])
-    .then(() => NavigationService.navigate('Home'));
+    .then(() => NavigationService.navigate('Auth'));
 };
 
 const loginUserFail = (dispatch) => {
