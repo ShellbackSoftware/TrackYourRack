@@ -4,7 +4,7 @@ import {
     createAppContainer,
     createDrawerNavigator
   } from 'react-navigation';
-import { HeaderMenuButton } from './components/common';
+import { HeaderMenuButton, EditListButton } from './components/common';
 import SideMenu from './components/SideMenu/SideMenu';
 import NavigationService from './components/helpers/NavigationService';
 import {
@@ -57,7 +57,14 @@ const MainStack = createStackNavigator(
     PolishList: PolishListScreen,
   },
   {
-    headerMode: 'none'
+    headerMode: 'none',
+    navigationOptions: {
+      headerRight: (
+        <EditListButton
+          onPress={() => console.log('Edit list')}
+        />
+      ),
+    }
   }
 );
 

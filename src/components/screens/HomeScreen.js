@@ -1,9 +1,10 @@
 import React from 'react';
 import { Text, StyleSheet, BackHandler } from 'react-native';
 import { connect } from 'react-redux';
-import { getUserLists } from '../../actions';
+import { getUserLists, clearListname, openModal, closeModal } from '../../actions';
 import { Card, CardSection, Spinner } from '../common';
 import CustomListsList from '../CustomListsList';
+import AddCustomList from '../AddCustomList';
 
 class HomeScreen extends React.Component {
   componentDidMount() {
@@ -26,26 +27,42 @@ class HomeScreen extends React.Component {
     return true;
   }
 
+  toggleModal() {
+    this.props.clearListname();
+    if (this.props.showModal) {
+      this.props.closeModal();
+    } else {
+      this.props.openModal();
+    }
+  }
+
   renderLists() {
     if (this.props.loadingLists) {
-      return <Spinner />;
+      return <CardSection style={{ flex: 1 }}><Spinner /></CardSection>;
     }
-    return <CustomListsList />;
+    return (
+      <CustomListsList
+        onPress={() => this.toggleModal()}
+      />
+    );
   }
 
   render() {
     // eslint-disable-next-line
     const { containerStyle } = styles;
     return (
-      <Card>
+      <Card style={{ flex: 1 }}>
         <CardSection>
           <Text>Welcome, {this.props.username}!</Text>
           <Text>Select a list of polishes below, or tap on the menu button for more options.</Text>
         </CardSection>
 
-        <CardSection>
-          {this.renderLists()}
-        </CardSection>
+        {this.renderLists()}
+
+        <AddCustomList
+          visible={this.props.showModal}
+          closeModal={this.toggleModal.bind(this)}
+        />
       </Card>
     );
   }
@@ -59,8 +76,10 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   const { username, uid } = state.auth;
-  const { loadingLists } = state.lists;
-  return { username, loadingLists, uid };
+  const { loadingLists, showModal, userLists } = state.lists;
+  return { username, loadingLists, uid, showModal, userLists };
 };
 
-export default connect(mapStateToProps, { getUserLists })(HomeScreen);
+export default connect(mapStateToProps, {
+  getUserLists, clearListname, openModal, closeModal
+})(HomeScreen);

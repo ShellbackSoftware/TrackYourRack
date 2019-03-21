@@ -5,8 +5,7 @@ import {
   FlatList,
   Text,
   View,
-  StyleSheet,
-  //TouchableOpacity
+  StyleSheet
   } from 'react-native';
 import { Icon, SearchBar } from 'react-native-elements';
 import { connect } from 'react-redux';
@@ -58,10 +57,6 @@ class PolishListScreen extends React.Component {
 
   scrollToTop() {
     this.flatListRef.scrollToIndex({ animated: true, index: 0 });
-  }
-
-  loadMoreRows() {
-    console.log('End reached');
   }
 
   searchFilterFunction() {

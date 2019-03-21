@@ -10,7 +10,6 @@ import {
   SWATCH_PATH,
   DEFAULT_SWATCH
 } from '../../../actions/constants';
-//import NavigationService from '../../helpers/NavigationService';
 import SinglePolishFull from './SinglePolishFull';
 import { CardSection } from '../../common';
 
@@ -18,13 +17,6 @@ class PolishListItem extends React.PureComponent {
   state = {
     showModal: false,
   };
-
-  onRowPress() {
-    //const polish = this.props.polishItem;
-    //NavigationService.navigate('SinglePolish', { polish });
-    /*const { listName } = this.props.customList.item;
-    NavigationService.navigate('PolishList', { listName });*/
-  }
 
   toggleModal() {
     this.setState({ showModal: !this.state.showModal });

@@ -13,6 +13,11 @@ export const LOGOUT_USER = 'logout_user';
 
 // Home page
 export const SELECT_LIST = 'select_list';
+export const LISTNAME_CHANGED = 'listname_changed';
+export const LIST_CREATED = 'list_created';
+export const CLEAR_LISTNAME = 'clear_listname';
+export const OPEN_MODAL = 'open_modal';
+export const CLOSE_MODAL = 'close_modal';
 
 // Polish stuff
 export const ALL_POLISHES = 'all_polishes';
