@@ -4,8 +4,16 @@ import {
   START_API_CALL,
   GET_LIST_CONTENT,
   CLEAR_POLISH_STATE,
-  FINISH_POLISH_LIST
+  FINISH_POLISH_LIST,
+  SEARCH_TERM_CHANGED
 } from './constants';
+
+export const searchtermChanged = (text) => {
+  return {
+      type: SEARCH_TERM_CHANGED,
+      payload: text
+  };
+};
 
 export const getAllPolishes = () => {
   return (dispatch) => {

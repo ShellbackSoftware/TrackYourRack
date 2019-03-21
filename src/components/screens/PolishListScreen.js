@@ -12,7 +12,8 @@ import { connect } from 'react-redux';
 import {
   getPolishList,
   clearPolishState,
-  finishPolishList
+  finishPolishList,
+  searchtermChanged
   } from '../../actions';
 import { Card, CardSection, Spinner } from '../common';
 import PolishListItem from './polish/PolishListItem';
@@ -20,7 +21,9 @@ import PolishListItem from './polish/PolishListItem';
 class PolishListScreen extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { polishes: [],
+    this.state = {
+      polishes: [],
+      tempPolishes: [],
       customList: false,
       listid: this.props.navigation.getParam('listID', null)
     };
@@ -49,26 +52,25 @@ class PolishListScreen extends React.Component {
     this.props.clearPolishState();
   }
 
+  onSearchTermChange(text) {
+    this.props.searchtermChanged(text);
+    const results = this.state.polishes.filter(polish => {
+        const pData = `${polish.pName.toUpperCase()}${polish.pBrand.toUpperCase()}`;
+        const termData = text.toUpperCase();
+        return pData.indexOf(termData) > -1;
+      });
+
+      this.setState({ tempPolishes: results });
+  }
+
   getListContent() {
     const { allPolishes, curPolishes } = this.props;
     const polishes = _.intersectionBy(allPolishes, curPolishes, 'pID');
-    this.setState({ polishes });
+    this.setState({ polishes, tempPolishes: polishes });
   }
 
   scrollToTop() {
     this.flatListRef.scrollToIndex({ animated: true, index: 0 });
-  }
-
-  searchFilterFunction() {
-    /*
-    const newData = this.arrayholder.filter(item => {
-      const itemData = `${item.pName.toUpperCase()}
-      ${item.pBrand.toUpperCase()}`;
-       const textData = text.toUpperCase();
-
-       return itemData.indexOf(textData) > -1;
-    });
-    this.setState({ polishes: newData });*/
   }
 
   renderHeader() {
@@ -79,8 +81,10 @@ class PolishListScreen extends React.Component {
         placeholder="Search For Polish . . ."
         lightTheme
         round
-        onChangeText={text => this.searchFilterFunction(text)}
+        onChangeText={this.onSearchTermChange.bind(this)}
         autoCorrect={false}
+        onClear={() => this.getListContent()}
+        value={this.props.searchTerm}
       />
     );
   }
@@ -128,7 +132,7 @@ class PolishListScreen extends React.Component {
           <CardSection style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-end' }}>
             <FlatList
               ref={(ref) => { this.flatListRef = ref; }}
-              data={this.state.polishes}
+              data={this.state.tempPolishes}
               renderItem={this.renderItem}
               keyExtractor={polish => polish.pID}
               initialNumToRender={50}
@@ -165,10 +169,10 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   const { uid, token } = state.auth;
-  const { loadingPolish, allPolishes, curPolishes } = state.polishes;
-  return { loadingPolish, uid, token, allPolishes, curPolishes };
+  const { loadingPolish, allPolishes, curPolishes, searchTerm } = state.polishes;
+  return { loadingPolish, uid, token, allPolishes, curPolishes, searchTerm };
 };
 
 export default connect(mapStateToProps, {
-  getPolishList, clearPolishState, finishPolishList
+  getPolishList, clearPolishState, finishPolishList, searchtermChanged
 })(PolishListScreen);

@@ -26,3 +26,4 @@ export const GET_LIST_CONTENT = 'get_list_content';
 export const GET_LISTS = 'get_lists';
 export const CLEAR_POLISH_STATE = 'clear_polish_state';
 export const FINISH_POLISH_LIST = 'finish_polish_list';
+export const SEARCH_TERM_CHANGED = 'search_term_changed';

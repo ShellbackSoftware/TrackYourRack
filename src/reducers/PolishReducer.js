@@ -3,13 +3,15 @@ import {
   START_API_CALL,
   GET_LIST_CONTENT,
   CLEAR_POLISH_STATE,
-  FINISH_POLISH_LIST
+  FINISH_POLISH_LIST,
+  SEARCH_TERM_CHANGED
  } from '../actions/constants';
 
 const INITIAL_STATE = {
   loadingPolish: true,
   allPolishes: [],
-  curPolishes: []
+  curPolishes: [],
+  searchTerm: ''
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -25,6 +27,8 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, curPolishes: [] };
     case FINISH_POLISH_LIST:
     return { ...state, loadingPolish: false };
+    case SEARCH_TERM_CHANGED:
+      return { ...state, searchTerm: info };
     default:
       return state;
  }
