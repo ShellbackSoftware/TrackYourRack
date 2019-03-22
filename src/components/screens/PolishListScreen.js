@@ -13,10 +13,13 @@ import {
   getPolishList,
   clearPolishState,
   finishPolishList,
-  searchtermChanged
+  searchtermChanged,
+  openModal,
+  closeModal
   } from '../../actions';
 import { Card, CardSection, Spinner } from '../common';
 import PolishListItem from './polish/PolishListItem';
+import EditCustomList from '../EditCustomList';
 
 class PolishListScreen extends React.Component {
   constructor(props) {
@@ -30,7 +33,7 @@ class PolishListScreen extends React.Component {
     if (this.state.listid > 0) {
       this.props.getPolishList(this.state.listid);
     } else {
-      this.state = { polishes: this.props.allPolishes };
+      this.state = { polishes: this.props.allPolishes, tempPolishes: this.props.allPolishes };
     }
    }
 
@@ -67,6 +70,14 @@ class PolishListScreen extends React.Component {
     const { allPolishes, curPolishes } = this.props;
     const polishes = _.intersectionBy(allPolishes, curPolishes, 'pID');
     this.setState({ polishes, tempPolishes: polishes });
+  }
+
+  toggleModal() {
+    if (this.props.showModal) {
+      this.props.closeModal();
+    } else {
+      this.props.openModal();
+    }
   }
 
   scrollToTop() {
@@ -142,8 +153,12 @@ class PolishListScreen extends React.Component {
 
         {this.renderScrollButton()}
           </CardSection>
-        </Card>
 
+          <EditCustomList
+            visible={this.props.showModal}
+            closeModal={this.toggleModal.bind(this)}
+          />
+        </Card>
     );
   }
 }
@@ -170,9 +185,10 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
   const { uid, token } = state.auth;
   const { loadingPolish, allPolishes, curPolishes, searchTerm } = state.polishes;
-  return { loadingPolish, uid, token, allPolishes, curPolishes, searchTerm };
+  const { showModal } = state.lists;
+  return { loadingPolish, uid, token, allPolishes, curPolishes, searchTerm, showModal };
 };
 
 export default connect(mapStateToProps, {
-  getPolishList, clearPolishState, finishPolishList, searchtermChanged
+  getPolishList, clearPolishState, finishPolishList, searchtermChanged, openModal, closeModal
 })(PolishListScreen);

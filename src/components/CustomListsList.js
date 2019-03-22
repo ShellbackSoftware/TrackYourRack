@@ -33,7 +33,7 @@ class CustomListsList extends React.Component {
     const customList = {
       item: {
       listID: 0,
-      listname: 'View All Polishes',
+      listname: 'All Polishes',
       uID: this.props.uid
       }
     };

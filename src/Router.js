@@ -4,7 +4,7 @@ import {
     createAppContainer,
     createDrawerNavigator
   } from 'react-navigation';
-import { HeaderMenuButton, EditListButton } from './components/common';
+import { CustomHeader, HeaderMenuButton, EditListButton } from './components/common';
 import SideMenu from './components/SideMenu/SideMenu';
 import NavigationService from './components/helpers/NavigationService';
 import {
@@ -29,9 +29,6 @@ const DrawerNav = createDrawerNavigator(
   {
     contentComponent: SideMenu,
     headerMode: 'none',
-    navigationOptions: {
-      headerLeft: null
-    }
   }
 );
 
@@ -45,10 +42,6 @@ const AuthStack = createStackNavigator(
   {
     initialRouteName: 'Auth',
     headerMode: 'none',
-    navigationOptions: {
-      headerLeft: null,
-      headerRight: null
-    }
   }
 );
 
@@ -58,13 +51,6 @@ const MainStack = createStackNavigator(
   },
   {
     headerMode: 'none',
-    navigationOptions: {
-      headerRight: (
-        <EditListButton
-          onPress={() => console.log('Edit list')}
-        />
-      ),
-    }
   }
 );
 
@@ -72,29 +58,47 @@ const RootStack = createStackNavigator(
   {
     loginFlow: {
       screen: AuthStack,
+      navigationOptions: {
+        headerLeft: null,
+        headerRight: null
+      }
     },
     mainFlow: {
       screen: DrawerNav,
+      navigationOptions: ({ navigation }) => ({
+        title: navigation.state.routes[navigation.state.index].routeName,
+        headerLeft: null,
+        headerRight: (
+          <HeaderMenuButton
+          onPress={() => NavigationService.toggleDrawer()}
+          />
+        ),
+      })
     },
     polishFlow: {
       screen: MainStack,
+      navigationOptions: ({ navigation }) => ({
+        title: navigation.state.routes[navigation.state.index].params.listname,
+        headerRight: (
+          <EditListButton
+          onPress={() => console.log('Edit list')}
+          />
+        ),
+      })
     },
   },
   {
     initialRouteName: 'loginFlow',
     defaultNavigationOptions: {
+      header: props => <CustomHeader {...props} />,
+      headerMode: 'none',
       headerStyle: {
-        backgroundColor: '#00BCD6'
+        backgroundColor: 'transparent'
       },
-      headerTintColor: '#fff',
       headerTitleStyle: {
-        fontWeight: 'bold'
-      },
-      headerRight: (
-        <HeaderMenuButton
-        onPress={() => NavigationService.toggleDrawer()}
-        />
-      ),
+        fontWeight: 'bold',
+        color: '#fff',
+      }
     }
   }
 );
