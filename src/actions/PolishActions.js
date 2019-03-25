@@ -1,13 +1,16 @@
+import NavigationService from '../components/helpers/NavigationService';
 import {
   SITE_BASE,
   ALL_POLISHES,
   START_API_CALL,
   GET_LIST_CONTENT,
   CLEAR_POLISH_STATE,
-  FINISH_POLISH_LIST,
   SEARCH_TERM_CHANGED,
   SET_EDIT_MODE,
-  CLEAR_EDIT_MODE
+  CLEAR_EDIT_MODE,
+  FINISH_API_CALL,
+  ADD_SEL_POLISH,
+  REM_SEL_POLISH
 } from './constants';
 
 export const searchtermChanged = (text) => {
@@ -59,7 +62,7 @@ export const getPolishList = (listid) => {
 
 export const finishPolishList = () => {
   return (dispatch) => {
-    dispatch({ type: FINISH_POLISH_LIST });
+    dispatch({ type: FINISH_API_CALL });
   };
 };
 
@@ -79,5 +82,65 @@ export const setEditMode = () => {
 export const clearEditMode = () => {
   return (dispatch) => {
     dispatch({ type: CLEAR_EDIT_MODE });
+  };
+};
+
+export const addSelPolish = (pID) => {
+ return (dispatch) => {
+    dispatch({
+      type: ADD_SEL_POLISH,
+      payload: pID
+    });
+  };
+};
+
+export const remSelPolish = (pID) => {
+  return (dispatch) => {
+     dispatch({
+       type: REM_SEL_POLISH,
+       payload: pID
+     });
+   };
+ };
+
+export const addPolishToList = (uid, listid, pID, route) => {
+  return (dispatch) => {
+    dispatch({ type: START_API_CALL });
+
+    fetch(`${SITE_BASE}/api/lists/content/${listid}?_format=json`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        uid,
+        pID
+      })
+    })
+    .then(() => {
+      dispatch({ type: FINISH_API_CALL });
+      NavigationService.navigate(route);
+    });
+  };
+};
+
+export const removePolishFromList = (uid, listid, pID, route) => {
+  return (dispatch) => {
+    dispatch({ type: START_API_CALL });
+
+    fetch(`${SITE_BASE}/api/lists/content/${listid}?_format=json`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        uid,
+        pID
+      })
+    })
+    .then(() => {
+      dispatch({ type: FINISH_API_CALL });
+      NavigationService.navigate(route);
+    });
   };
 };

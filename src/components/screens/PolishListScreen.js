@@ -15,7 +15,8 @@ import {
   finishPolishList,
   searchtermChanged,
   openModal,
-  closeModal
+  closeModal,
+  removePolishFromList
   } from '../../actions';
 import { Card, CardSection, Spinner, Button } from '../common';
 import PolishListItem from './polish/PolishListItem';
@@ -28,7 +29,8 @@ class PolishListScreen extends React.Component {
       polishes: [],
       tempPolishes: [],
       customList: false,
-      listid: this.props.navigation.getParam('listID', null)
+      listid: this.props.navigation.getParam('listID'),
+      listname: this.props.navigation.getParam('listname')
     };
     if (this.state.listid > 0) {
       this.props.getPolishList(this.state.listid);
@@ -64,6 +66,15 @@ class PolishListScreen extends React.Component {
       });
 
       this.setState({ tempPolishes: results });
+  }
+
+  onRemovePress() {
+    const uid = this.props.uid;
+    const listid = this.state.listid;
+    // eslint-disable-next-line
+    this.props.selectedPolishes.map((p) => {
+      this.props.removePolishFromList(uid, listid, p, this.state.listname);
+    });
   }
 
   getListContent() {
@@ -108,8 +119,8 @@ class PolishListScreen extends React.Component {
     if (this.props.editMode) {
       return (
       <CardSection style={styles.footerStyle}>
-        <Button style={{ flex: 1 }}>
-          Remove Selected Polishes From {this.props.navigation.getParam('listname', 'List')}
+        <Button style={{ flex: 1 }} onPress={this.onRemovePress.bind(this)}>
+          Remove Selected Polishes
         </Button>
       </CardSection>
       );
@@ -200,11 +211,27 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   const { uid, token } = state.auth;
-  const { loadingPolish, allPolishes, curPolishes, searchTerm, editMode } = state.polishes;
+  const { loadingPolish, allPolishes, curPolishes,
+    searchTerm, editMode, selectedPolishes } = state.polishes;
   const { showModal } = state.lists;
-  return { loadingPolish, uid, token, allPolishes, curPolishes, searchTerm, showModal, editMode };
+  return { loadingPolish,
+    uid,
+    token,
+    allPolishes,
+    curPolishes,
+    searchTerm,
+    showModal,
+    editMode,
+    selectedPolishes
+  };
 };
 
 export default connect(mapStateToProps, {
-  getPolishList, clearPolishState, finishPolishList, searchtermChanged, openModal, closeModal
+  getPolishList,
+  clearPolishState,
+  finishPolishList,
+  searchtermChanged,
+  openModal,
+  closeModal,
+  removePolishFromList
 })(PolishListScreen);

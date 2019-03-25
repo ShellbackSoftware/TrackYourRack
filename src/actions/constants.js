@@ -23,10 +23,12 @@ export const CLOSE_MODAL = 'close_modal';
 // Polish stuff
 export const ALL_POLISHES = 'all_polishes';
 export const START_API_CALL = 'start_api_call';
+export const FINISH_API_CALL = 'finish_api_call';
 export const GET_LIST_CONTENT = 'get_list_content';
 export const GET_LISTS = 'get_lists';
 export const CLEAR_POLISH_STATE = 'clear_polish_state';
-export const FINISH_POLISH_LIST = 'finish_polish_list';
 export const SEARCH_TERM_CHANGED = 'search_term_changed';
 export const SET_EDIT_MODE = 'set_edit_mode';
 export const CLEAR_EDIT_MODE = 'clear_edit_mode';
+export const ADD_SEL_POLISH = 'add_sel_polish';
+export const REM_SEL_POLISH = 'rem_sel_polish';

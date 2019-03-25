@@ -4,7 +4,12 @@ import { connect } from 'react-redux';
 import { Text, View, StyleSheet, FlatList } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import { Button, CardSection, Spinner } from '../common';
-import { getPolishList, clearEditMode, searchtermChanged } from '../../actions';
+import {
+    getPolishList,
+    clearEditMode,
+    searchtermChanged,
+    addPolishToList
+  } from '../../actions';
 import PolishListItem from '../screens/polish/PolishListItem';
 // Only used to add polishes to list.
 class EditListWidget extends React.Component {
@@ -16,6 +21,7 @@ class EditListWidget extends React.Component {
     };
     const curList = this.props.navigation.getParam('curList', 'List');
     this.state.listname = curList.listname;
+    this.state.listid = curList.listID;
     this.props.getPolishList(curList.listID);
   }
 
@@ -49,7 +55,12 @@ class EditListWidget extends React.Component {
   }
 
   saveChanges() {
-
+    const uid = this.props.uid;
+    const listid = this.state.listid;
+    // eslint-disable-next-line
+    this.props.selectedPolishes.map((p) => {
+      this.props.addPolishToList(uid, listid, p, 'PolishList');
+    });
   }
 
   renderHeader() {
@@ -156,10 +167,11 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  const { allPolishes, curPolishes, searchTerm, loadingPolish } = state.polishes;
-  return { allPolishes, curPolishes, searchTerm, loadingPolish };
+  const { uid } = state.auth;
+  const { allPolishes, curPolishes, searchTerm, loadingPolish, selectedPolishes } = state.polishes;
+  return { uid, allPolishes, curPolishes, searchTerm, loadingPolish, selectedPolishes };
 };
 
 export default connect(mapStateToProps, {
-  getPolishList, clearEditMode, searchtermChanged
+  getPolishList, clearEditMode, searchtermChanged, addPolishToList
 })(EditListWidget);

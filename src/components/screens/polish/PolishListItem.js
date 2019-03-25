@@ -11,7 +11,7 @@ import {
   SWATCH_PATH,
   DEFAULT_SWATCH
 } from '../../../actions/constants';
-import { setEditMode, clearEditMode } from '../../../actions';
+import { setEditMode, clearEditMode, addSelPolish, remSelPolish } from '../../../actions';
 import SinglePolishFull from './SinglePolishFull';
 import { CardSection } from '../../common';
 
@@ -23,7 +23,14 @@ class PolishListItem extends React.PureComponent {
 
   onPress() {
     if (this.props.editMode) {
-      this.setState({ selected: !this.state.selected });
+      const curPID = this.props.polishItem.pID;
+      if (this.state.selected) {
+        this.setState({ selected: false });
+        this.props.remSelPolish(curPID);
+      } else {
+        this.setState({ selected: true });
+        this.props.addSelPolish(curPID);
+      }
     } else {
       this.toggleModal();
     }
@@ -118,11 +125,11 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  const { editMode } = state.polishes;
-  return { editMode };
+  const { editMode, selectedPolishes } = state.polishes;
+  return { editMode, selectedPolishes };
 };
 
 export default connect(mapStateToProps, {
-  setEditMode, clearEditMode
+  setEditMode, clearEditMode, addSelPolish, remSelPolish
 })(PolishListItem);
 
