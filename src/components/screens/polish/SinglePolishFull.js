@@ -43,10 +43,13 @@ class SinglePolishFull extends React.Component {
         </CardSection>
 
         <CardSection>
-          <Text>{`
-          Brand:
-          Finish:
-          etc. etc.
+          <Text>{` Brand: ${polish.pBrand}
+          Collection: ${polish.pCollection}
+          Finish: ${polish.pFinish}
+          Number: ${polish.pNumber}
+          Release Season: ${polish.pSeason}
+          Release Year: ${polish.pYear}
+          Website: ${polish.pSite}
           `}</Text>
         </CardSection>
 

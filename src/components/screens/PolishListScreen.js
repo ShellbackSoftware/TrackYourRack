@@ -20,7 +20,6 @@ import {
   } from '../../actions';
 import { Card, CardSection, Spinner, Button } from '../common';
 import PolishListItem from './polish/PolishListItem';
-import EditCustomList from '../EditCustomList';
 
 class PolishListScreen extends React.Component {
   constructor(props) {
@@ -50,6 +49,7 @@ class PolishListScreen extends React.Component {
   componentDidUpdate(prevProps) {
     if ((this.props.curPolishes !== prevProps.curPolishes) && (this.state.listid > 0)) {
       this.getListContent();
+      console.log('Back from adding');
     }
   }
 
@@ -176,10 +176,6 @@ class PolishListScreen extends React.Component {
         {this.renderScrollButton()}
           </CardSection>
           {this.renderFooter()}
-          <EditCustomList
-            visible={this.props.showModal}
-            closeModal={this.toggleModal.bind(this)}
-          />
         </Card>
     );
   }

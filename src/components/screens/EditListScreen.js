@@ -69,11 +69,13 @@ class EditListScreen extends React.Component {
           <Text style={titleStyle}>Manage {curList.listname}</Text>
         </CardSection>
 
-        <CardSection style={btnContainerStyle}>
+        {/*<CardSection style={btnContainerStyle}>
           <Button> Rename {curList.listname}</Button>
-        </CardSection>
+    </CardSection>*/}
         <CardSection style={btnContainerStyle}>
-          <Button onPress={() => this.setState({ editList: true })}> Add Polishes to {curList.listname}</Button>
+          <Button onPress={() => this.setState({ editList: true })}>
+            Add Polishes to {curList.listname}
+          </Button>
         </CardSection>
 
         <CardSection>
