@@ -6,20 +6,51 @@ import {
       View,
       Image
       } from 'react-native';
+import { connect } from 'react-redux';
 import {
   SWATCH_PATH,
   DEFAULT_SWATCH
 } from '../../../actions/constants';
+import { setEditMode, clearEditMode } from '../../../actions';
 import SinglePolishFull from './SinglePolishFull';
 import { CardSection } from '../../common';
 
 class PolishListItem extends React.PureComponent {
   state = {
     showModal: false,
+    selected: false
   };
+
+  onPress() {
+    if (this.props.editMode) {
+      this.setState({ selected: !this.state.selected });
+    } else {
+      this.toggleModal();
+    }
+  }
+
+  onLongPress() {
+    this.toggleEditMode();
+  }
+
+  setStyle() {
+    if (this.props.editMode && this.state.selected) {
+      return {
+        backgroundColor: '#B39DD6',
+      };
+    }
+  }
 
   toggleModal() {
     this.setState({ showModal: !this.state.showModal });
+  }
+
+  toggleEditMode() {
+    if (this.props.editMode) {
+      this.props.clearEditMode();
+    } else {
+      this.props.setEditMode();
+    }
   }
 
   renderRow() {
@@ -32,7 +63,7 @@ class PolishListItem extends React.PureComponent {
     }
 
     return (
-      <CardSection>
+      <CardSection style={this.setStyle()}>
         <View style={tContainerStyle}>
           <Image
             style={thumbnailStyle}
@@ -51,7 +82,8 @@ class PolishListItem extends React.PureComponent {
     return (
       <View>
       <TouchableOpacity
-        onPress={this.toggleModal.bind(this)}
+        onPress={this.onPress.bind(this)}
+        onLongPress={this.onLongPress.bind(this)}
       >
         <View>
          {this.renderRow()}
@@ -85,4 +117,12 @@ const styles = StyleSheet.create({
   }
 });
 
-export default PolishListItem;
+const mapStateToProps = state => {
+  const { editMode } = state.polishes;
+  return { editMode };
+};
+
+export default connect(mapStateToProps, {
+  setEditMode, clearEditMode
+})(PolishListItem);
+

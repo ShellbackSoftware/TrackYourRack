@@ -21,7 +21,7 @@ class CustomListItem extends React.Component {
         onPress={this.onRowPress.bind(this)}
       >
         <View>
-          <CardSection>
+          <CardSection style={styles.containerStyle}>
           <Text style={styles.titleStyle}>
             {listname}
           </Text>
@@ -33,9 +33,13 @@ class CustomListItem extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  containerStyle: {
+    justifyContent: 'center'
+  },
   titleStyle: {
     fontSize: 18,
-    paddingLeft: 15
+    paddingLeft: 15,
+    textAlign: 'center'
   }
 });
 

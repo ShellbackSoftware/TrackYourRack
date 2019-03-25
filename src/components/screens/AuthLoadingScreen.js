@@ -9,12 +9,14 @@ import { authenticateUser, getAllPolishes } from '../../actions';
 
 class AuthLoadingScreen extends React.Component {
   constructor(props) {
+    console.log('constructor');
     super(props);
     this._bootstrapAsync();
   }
   state = { token: '', uid: '', username: '' };
 
   _bootstrapAsync = async () => {
+    console.log('Start promise');
     const tokenPromise = SecureStore.getItemAsync('token')
       .then(token => this.setState({ token }));
     const namePromise = SecureStore.getItemAsync('username')
@@ -29,7 +31,9 @@ class AuthLoadingScreen extends React.Component {
         uid: this.state.uid,
         token: this.state.token
       };
+      console.log('after promise, before authenticate');
       this.props.authenticateUser(userObj);
+      console.log('After authenticate');
       NavigationService.navigate(this.state.token ? 'Home' : 'Login');
     });
   };

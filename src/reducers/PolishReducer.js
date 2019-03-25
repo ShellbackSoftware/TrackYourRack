@@ -4,14 +4,17 @@ import {
   GET_LIST_CONTENT,
   CLEAR_POLISH_STATE,
   FINISH_POLISH_LIST,
-  SEARCH_TERM_CHANGED
+  SEARCH_TERM_CHANGED,
+  SET_EDIT_MODE,
+  CLEAR_EDIT_MODE
  } from '../actions/constants';
 
 const INITIAL_STATE = {
   loadingPolish: true,
   allPolishes: [],
   curPolishes: [],
-  searchTerm: ''
+  searchTerm: '',
+  editMode: false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -29,6 +32,10 @@ export default (state = INITIAL_STATE, action) => {
     return { ...state, loadingPolish: false };
     case SEARCH_TERM_CHANGED:
       return { ...state, searchTerm: info };
+    case SET_EDIT_MODE:
+      return { ...state, editMode: true };
+    case CLEAR_EDIT_MODE:
+      return { ...state, editMode: false };
     default:
       return state;
  }

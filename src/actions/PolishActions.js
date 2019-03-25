@@ -5,7 +5,9 @@ import {
   GET_LIST_CONTENT,
   CLEAR_POLISH_STATE,
   FINISH_POLISH_LIST,
-  SEARCH_TERM_CHANGED
+  SEARCH_TERM_CHANGED,
+  SET_EDIT_MODE,
+  CLEAR_EDIT_MODE
 } from './constants';
 
 export const searchtermChanged = (text) => {
@@ -65,5 +67,17 @@ export const finishPolishList = () => {
 export const clearPolishState = () => {
   return (dispatch) => {
     dispatch({ type: CLEAR_POLISH_STATE });
+  };
+};
+
+export const setEditMode = () => {
+  return (dispatch) => {
+    dispatch({ type: SET_EDIT_MODE });
+  };
+};
+
+export const clearEditMode = () => {
+  return (dispatch) => {
+    dispatch({ type: CLEAR_EDIT_MODE });
   };
 };

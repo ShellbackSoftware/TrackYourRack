@@ -17,7 +17,7 @@ import {
   openModal,
   closeModal
   } from '../../actions';
-import { Card, CardSection, Spinner } from '../common';
+import { Card, CardSection, Spinner, Button } from '../common';
 import PolishListItem from './polish/PolishListItem';
 import EditCustomList from '../EditCustomList';
 
@@ -104,6 +104,18 @@ class PolishListScreen extends React.Component {
     return <PolishListItem polishItem={polishList.item} />;
   }
 
+  renderFooter() {
+    if (this.props.editMode) {
+      return (
+      <CardSection style={styles.footerStyle}>
+        <Button style={{ flex: 1 }}>
+          Remove Selected Polishes From {this.props.navigation.getParam('listname', 'List')}
+        </Button>
+      </CardSection>
+      );
+    }
+  }
+
   renderScrollButton() {
     return (
         <Icon
@@ -134,7 +146,6 @@ class PolishListScreen extends React.Component {
     }
 
     return (
-
         <Card style={{ flex: 1 }}>
           <CardSection>
             {this.renderHeader()}
@@ -153,7 +164,7 @@ class PolishListScreen extends React.Component {
 
         {this.renderScrollButton()}
           </CardSection>
-
+          {this.renderFooter()}
           <EditCustomList
             visible={this.props.showModal}
             closeModal={this.toggleModal.bind(this)}
@@ -179,14 +190,19 @@ const styles = StyleSheet.create({
   },
   searchContainerStyle: {
     flex: 1
+  },
+  footerStyle: {
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });
 
 const mapStateToProps = state => {
   const { uid, token } = state.auth;
-  const { loadingPolish, allPolishes, curPolishes, searchTerm } = state.polishes;
+  const { loadingPolish, allPolishes, curPolishes, searchTerm, editMode } = state.polishes;
   const { showModal } = state.lists;
-  return { loadingPolish, uid, token, allPolishes, curPolishes, searchTerm, showModal };
+  return { loadingPolish, uid, token, allPolishes, curPolishes, searchTerm, showModal, editMode };
 };
 
 export default connect(mapStateToProps, {

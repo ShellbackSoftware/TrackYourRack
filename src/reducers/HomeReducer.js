@@ -3,6 +3,7 @@ import {
   GET_LISTS,
   LISTNAME_CHANGED,
   LIST_CREATED,
+  LIST_DELETED,
   CLEAR_LISTNAME,
   OPEN_MODAL,
   CLOSE_MODAL
@@ -26,6 +27,8 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, listname: info };
     case LIST_CREATED:
       return { ...state, listname: '', loadingLists: false, showModal: false };
+    case LIST_DELETED:
+      return { ...state, loadingLists: false };
     case CLEAR_LISTNAME:
       return { ...state, listname: '' };
     case OPEN_MODAL:

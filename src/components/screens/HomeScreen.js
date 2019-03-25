@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, StyleSheet, BackHandler } from 'react-native';
+import { Text, BackHandler } from 'react-native';
 import { connect } from 'react-redux';
 import { getUserLists, clearListname, openModal, closeModal } from '../../actions';
 import { Card, CardSection, Spinner } from '../common';
@@ -8,6 +8,7 @@ import AddCustomList from '../AddCustomList';
 
 class HomeScreen extends React.Component {
   componentDidMount() {
+    this.props.getUserLists(this.props.uid);
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     this.subs = [
       this.props.navigation.addListener('didFocus', (payload) => this.componentDidFocus(payload)),
@@ -30,7 +31,7 @@ class HomeScreen extends React.Component {
   toggleModal() {
     this.props.clearListname();
     if (this.props.showModal) {
-      this.props.closeModal();
+      this.props.closeModal('Home');
     } else {
       this.props.openModal();
     }
@@ -48,8 +49,6 @@ class HomeScreen extends React.Component {
   }
 
   render() {
-    // eslint-disable-next-line
-    const { containerStyle } = styles;
     return (
       <Card style={{ flex: 1 }}>
         <CardSection>
@@ -68,16 +67,11 @@ class HomeScreen extends React.Component {
   }
 }
 
-const styles = StyleSheet.create({
-  containerStyle: {
-    flex: 1
-  }
-});
-
 const mapStateToProps = state => {
   const { username, uid } = state.auth;
   const { loadingLists, showModal, userLists } = state.lists;
-  return { username, loadingLists, uid, showModal, userLists };
+  const { loadingPolish } = state.polishes;
+  return { username, loadingLists, uid, showModal, userLists, loadingPolish };
 };
 
 export default connect(mapStateToProps, {

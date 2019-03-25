@@ -14,7 +14,8 @@ const SideMenuItem = ({ onPress, children }) => {
 
 const styles = StyleSheet.create({
   textStyle: {
-
+    fontSize: 20,
+    textAlign: 'center'
   },
   itemStyle: {
     borderBottomWidth: 1,
@@ -23,7 +24,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     flexDirection: 'row',
     borderColor: '#ddd',
-    position: 'relative'
+    position: 'relative',
+    height: 45
   }
 });
 

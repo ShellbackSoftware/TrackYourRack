@@ -15,7 +15,8 @@ import {
   ProfileScreen,
   FollowingScreen,
   ChatScreen,
-  ScannerScreen
+  ScannerScreen,
+  EditListScreen
 } from './components/screens';
 
 const DrawerNav = createDrawerNavigator(
@@ -81,17 +82,26 @@ const RootStack = createStackNavigator(
         title: navigation.state.routes[navigation.state.index].params.listname,
         headerRight: (
           <EditListButton
-          onPress={() => console.log('Edit list')}
+            onPress={() => NavigationService.navigate('EditList', {
+                                  curList: navigation.state.routes[navigation.state.index].params
+                                })}
           />
         ),
       })
     },
+    EditList: {
+      screen: EditListScreen,
+      mode: 'modal',
+      headerMode: 'none'
+    }
   },
   {
     initialRouteName: 'loginFlow',
+    headerLayoutPreset: 'center',
     defaultNavigationOptions: {
       header: props => <CustomHeader {...props} />,
       headerMode: 'none',
+      headerTintColor: '#fff',
       headerStyle: {
         backgroundColor: 'transparent'
       },
