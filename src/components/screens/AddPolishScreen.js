@@ -5,44 +5,43 @@ import { deleteList } from '../../actions';
 import { CardSection, Button, Input } from '../common';
 
 class AddPolishScreen extends React.Component {
-  state = {
-    polish: {}
-  }
+  state = { error: false };
 
-  onpnameChange(text) {
-    this.setState({ polish: { pName: text } });
-  }
-
-  onpbrandChange(text) {
-    this.setState({ polish: { pBrand: text } });
-  }
-
-  onpcollectionChange(text) {
-    this.setState({ polish: { pCollection: text } });
-  }
-
-  onpnumberChange(text) {
-    this.setState({ polish: { pNumber: text } });
-  }
-
-  onpfinishChange(text) {
-    this.setState({ polish: { pFinish: text } });
-  }
-
-  onpseasonChange(text) {
-    this.setState({ polish: { pSeason: text } });
-  }
-
-  onpyearChange(text) {
-    this.setState({ polish: { pYear: text } });
-  }
-
-  onpsiteChange(text) {
-    this.setState({ polish: { pSite: text } });
+  ontextChange(field, value) {
+    this.setState({ [field]: value });
   }
 
   addPolish() {
-    console.log(this.state.polish);
+    this.setState({ error: false });
+    if ((!this.state.pName || this.state.pName.trim() === '')
+        || (!this.state.pBrand || this.state.pBrand.trim() === '')) {
+      this.setState({ error: true, errorMsg: 'Polish Name and Brand are required!' });
+    } else {
+      console.log('All good, add it!');
+    }
+  }
+
+  renderError() {
+    // TODO: Connect to props and send an error if API returns one
+   /* if (this.props.error) {
+      return (
+        <View style={{ backgroundColor: 'white' }}>
+            <Text style={styles.errorTextStyle}>
+              {this.props.error}
+            </Text>
+        </View>
+      );
+    } */
+
+    if (this.state.error) {
+      return (
+          <View style={{ backgroundColor: 'white' }}>
+              <Text style={styles.errorTextStyle}>
+                {this.state.errorMsg}
+              </Text>
+          </View>
+      );
+    }
   }
 
   renderForm() {
@@ -61,8 +60,8 @@ class AddPolishScreen extends React.Component {
           <Input
             label='Name *'
             placeholder='Happily Ever After'
-            onChangeText={this.onpnameChange.bind(this)}
-            value={this.state.polish.pName}
+            onChangeText={this.ontextChange.bind(this, 'pName')}
+            value={this.state.pName}
           />
         </CardSection>
 
@@ -70,8 +69,8 @@ class AddPolishScreen extends React.Component {
           <Input
             label='Brand *'
             placeholder='China Glaze'
-            onChangeText={this.onpbrandChange.bind(this)}
-            value={this.state.polish.pBrand}
+            onChangeText={this.ontextChange.bind(this, 'pBrand')}
+            value={this.state.pBrand}
           />
         </CardSection>
 
@@ -79,8 +78,8 @@ class AddPolishScreen extends React.Component {
           <Input
             label='Collection'
             placeholder='Glass Slipper'
-            onChangeText={this.onpcollectionChange.bind(this)}
-            value={this.state.polish.pCollection}
+            onChangeText={this.ontextChange.bind(this, 'pCollection')}
+            value={this.state.pCollection}
           />
         </CardSection>
 
@@ -88,8 +87,8 @@ class AddPolishScreen extends React.Component {
           <Input
             label='Number'
             placeholder='CGT425'
-            onChangeText={this.onpnumberChange.bind(this)}
-            value={this.state.polish.pNumber}
+            onChangeText={this.ontextChange.bind(this, 'pNumber')}
+            value={this.state.pNumber}
           />
         </CardSection>
 
@@ -97,8 +96,8 @@ class AddPolishScreen extends React.Component {
           <Input
             label='Finish'
             placeholder='Glass-Fleck'
-            onChangeText={this.onpfinishChange.bind(this)}
-            value={this.state.polish.pFinish}
+            onChangeText={this.ontextChange.bind(this, 'pFinish')}
+            value={this.state.pFinish}
           />
         </CardSection>
 
@@ -106,8 +105,8 @@ class AddPolishScreen extends React.Component {
           <Input
             label='Release Season'
             placeholder='Summer'
-            onChangeText={this.onpseasonChange.bind(this)}
-            value={this.state.polish.pSeason}
+            onChangeText={this.ontextChange.bind(this, 'pSeason')}
+            value={this.state.pSeason}
           />
         </CardSection>
 
@@ -115,8 +114,8 @@ class AddPolishScreen extends React.Component {
           <Input
             label='Release Year'
             placeholder='2004'
-            onChangeText={this.onpyearChange.bind(this)}
-            value={this.state.polish.pYear}
+            onChangeText={this.ontextChange.bind(this, 'pYear')}
+            value={this.state.pYear}
           />
         </CardSection>
 
@@ -124,10 +123,12 @@ class AddPolishScreen extends React.Component {
           <Input
             label='Website'
             placeholder='chinaglaze.com'
-            onChangeText={this.onpsiteChange.bind(this)}
-            value={this.state.polish.pSite}
+            onChangeText={this.ontextChange.bind(this, 'pSite')}
+            value={this.state.pSite}
           />
         </CardSection>
+
+        {this.renderError()}
 
         <CardSection>
           <Button onPress={() => this.addPolish()}>
@@ -180,10 +181,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center'
   },
-  dangerStyle: {
-    borderColor: 'red'
-  },
-  dangerTextStyle: {
+  errorTextStyle: {
+    fontSize: 20,
+    alignSelf: 'center',
     color: 'red'
   }
 });

@@ -31,7 +31,7 @@ class AddCustomList extends React.Component {
               </Text>
           </View>
       );
-  }
+    }
   }
 
   render() {
