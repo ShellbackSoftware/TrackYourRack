@@ -1,11 +1,12 @@
 import React from 'react';
-import { Text, StyleSheet, Modal, View, TouchableWithoutFeedback } from 'react-native';
+import { Text, StyleSheet, Modal, View, TouchableWithoutFeedback, Image } from 'react-native';
 import { connect } from 'react-redux';
+import { ImagePicker } from 'expo';
 import { deleteList } from '../../actions';
 import { CardSection, Button, Input } from '../common';
 
 class AddPolishScreen extends React.Component {
-  state = { error: false };
+  state = { error: false, pSwatch: null };
 
   ontextChange(field, value) {
     this.setState({ [field]: value });
@@ -18,6 +19,17 @@ class AddPolishScreen extends React.Component {
       this.setState({ error: true, errorMsg: 'Polish Name and Brand are required!' });
     } else {
       console.log('All good, add it!');
+    }
+  }
+
+  async pickImage() {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+    });
+
+    console.log(result);
+    if (!result.cancelled) {
+      this.setState({ pSwatch: result.uri });
     }
   }
 
@@ -47,7 +59,9 @@ class AddPolishScreen extends React.Component {
   renderForm() {
     const {
       titleStyle,
-      sectionStyle
+      sectionStyle,
+      uploadBtnStyle,
+      imageStyle
     } = styles;
     const { navigation } = this.props;
     return (
@@ -128,6 +142,17 @@ class AddPolishScreen extends React.Component {
           />
         </CardSection>
 
+        <CardSection style={sectionStyle}>
+          {this.state.pSwatch &&
+            <Image source={{ uri: this.state.pSwatch }} style={imageStyle} />}
+          <Button
+            style={uploadBtnStyle}
+            onPress={() => this.pickImage()}
+          >
+            Upload a swatch
+          </Button>
+        </CardSection>
+
         {this.renderError()}
 
         <CardSection>
@@ -185,6 +210,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
     alignSelf: 'center',
     color: 'red'
+  },
+  uploadBtnStyle: {
+    flex: 1
+  },
+  imageStyle: {
+    width: 75,
+    height: 75
   }
 });
 
