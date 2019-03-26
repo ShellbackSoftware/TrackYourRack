@@ -5,12 +5,33 @@ import { listnameChanged, createList } from '../actions';
 import { CardSection, Button, Input } from './common';
 
 class AddCustomList extends React.Component {
+  state = { error: false };
+
   onListnameChange(text) {
     this.props.listnameChanged(text);
   }
 
   onButtonPress() {
-    this.props.createList(this.props.uid, this.props.listname);
+    this.setState({ error: false });
+    if (this.props.listname.trim() === '') {
+      this.setState({ error: true, errorMsg: 'The list needs a name!' });
+    } else if (this.props.userLists.some(list => list.listname === this.props.listname.trim())) {
+      this.setState({ error: true, errorMsg: 'This list already exists!' });
+    } else {
+      this.props.createList(this.props.uid, this.props.listname);
+    }
+  }
+
+  renderError() {
+    if (this.state.error) {
+      return (
+          <View style={{ backgroundColor: 'white' }}>
+              <Text style={styles.errorTextStyle}>
+                {this.state.errorMsg}
+              </Text>
+          </View>
+      );
+  }
   }
 
   render() {
@@ -44,6 +65,8 @@ class AddCustomList extends React.Component {
             value={this.props.listname}
           />
         </CardSection>
+
+        {this.renderError()}
 
         <CardSection>
           <Button onPress={this.onButtonPress.bind(this)}> Save List </Button>
@@ -85,13 +108,18 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     justifyContent: 'center',
     flexDirection: 'row'
+  },
+  errorTextStyle: {
+    fontSize: 20,
+    alignSelf: 'center',
+    color: 'red'
   }
 });
 
 const mapStateToProps = state => {
-  const { listname } = state.lists;
+  const { listname, userLists } = state.lists;
   const { uid } = state.auth;
-  return { uid, listname };
+  return { uid, listname, userLists };
 };
 
 export default connect(mapStateToProps, {
