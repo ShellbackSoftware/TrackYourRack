@@ -7,3 +7,4 @@ export * from './Spinner';
 export * from './Confirm';
 export * from './HeaderMenuButton';
 export * from './EditListButton';
+export * from './AddPolishButton';

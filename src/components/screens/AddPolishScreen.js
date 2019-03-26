@@ -3,65 +3,32 @@ import { Text, StyleSheet, Modal, View, TouchableWithoutFeedback } from 'react-n
 import { connect } from 'react-redux';
 import { deleteList } from '../../actions';
 import { CardSection, Button } from '../common';
-import EditListWidget from '../widgets/EditListWidget';
 
-class EditListScreen extends React.Component {
-  state = {
-    editList: false
-  }
-
-  deleteList() {
-    const curList = this.props.navigation.getParam('curList', 'List');
-    this.props.deleteList(this.props.uid, curList.listID);
-  }
-
-  renderWidget() {
-    return (
-      <EditListWidget {...this.props} />
-    );
-  }
-
+class AddPolishScreen extends React.Component {
   renderModal() {
     const {
       titleStyle,
       sectionStyle,
-      dangerStyle,
-      dangerTextStyle,
       btnContainerStyle
     } = styles;
     const { navigation } = this.props;
-    const curList = navigation.getParam('curList', 'List');
-    /*if (curList.listname === 'All Polishes') {
-      return this.renderAllPolishes();
-    }*/
-    if (this.state.editList) {
-      return this.renderWidget();
-    }
     return (
       <View>
         <CardSection style={sectionStyle}>
-          <Text style={titleStyle}>Manage {curList.listname}</Text>
+          <Text style={titleStyle}>Add A Polish</Text>
         </CardSection>
 
-        {/*<CardSection style={btnContainerStyle}>
-          <Button> Rename {curList.listname}</Button>
-    </CardSection>*/}
         <CardSection style={btnContainerStyle}>
-          <Button onPress={() => this.setState({ editList: true })}>
-            Add Polishes to {curList.listname}
-          </Button>
+          <Text>Form here</Text>
         </CardSection>
 
         <CardSection>
-          <Button
-            btnStyle={dangerStyle}
-            tStyle={dangerTextStyle}
-            onPress={() => this.deleteList()}
-          >
-          Delete {curList.listname}
+          <Button>
+            Submit
           </Button>
-
-          <Button onPress={() => navigation.goBack()}> Close </Button>
+          <Button onPress={() => navigation.goBack()}>
+            Cancel
+          </Button>
         </CardSection>
       </View>
     );
@@ -124,4 +91,4 @@ const mapStateToProps = state => {
 
 export default connect(mapStateToProps, {
   deleteList
-})(EditListScreen);
+})(AddPolishScreen);

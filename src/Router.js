@@ -4,7 +4,11 @@ import {
     createAppContainer,
     createDrawerNavigator
   } from 'react-navigation';
-import { CustomHeader, HeaderMenuButton, EditListButton } from './components/common';
+import {
+    CustomHeader,
+    HeaderMenuButton,
+    EditListButton
+  } from './components/common';
 import SideMenu from './components/SideMenu/SideMenu';
 import NavigationService from './components/helpers/NavigationService';
 import {
@@ -16,7 +20,8 @@ import {
   FollowingScreen,
   ChatScreen,
   ScannerScreen,
-  EditListScreen
+  EditListScreen,
+  AddPolishScreen
 } from './components/screens';
 
 const DrawerNav = createDrawerNavigator(
@@ -85,12 +90,18 @@ const RootStack = createStackNavigator(
             onPress={() => NavigationService.navigate('EditList', {
                                   curList: navigation.state.routes[navigation.state.index].params
                                 })}
+            screen={navigation.state.routes[navigation.state.index].params.listname}
           />
         ),
       })
     },
     EditList: {
       screen: EditListScreen,
+      mode: 'modal',
+      headerMode: 'none'
+    },
+    AddPolish: {
+      screen: AddPolishScreen,
       mode: 'modal',
       headerMode: 'none'
     }

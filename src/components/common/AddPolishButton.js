@@ -1,23 +1,14 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { Icon } from 'react-native-elements';
-import NavigationService from '../helpers/NavigationService';
-import { AddPolishButton } from './AddPolishButton';
 
-const EditListButton = ({ onPress, screen }) => {
+const AddPolishButton = ({ onPress }) => {
     const { buttonStyle } = styles;
-    if (screen === 'All Polishes') {
-      return (
-        <AddPolishButton
-          onPress={() => NavigationService.navigate('AddPolish')}
-        />
-    );
-    }
 
     return (
         <Icon
           raised
-          name='edit'
+          name='plus'
           type='font-awesome'
           containerStyle={buttonStyle}
           onPress={onPress}
@@ -38,4 +29,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export { EditListButton };
+export { AddPolishButton };
