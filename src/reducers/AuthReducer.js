@@ -5,7 +5,8 @@ import {
   LOGIN_USER_FAIL,
   LOGIN_USER,
   AUTHENTICATE_USER,
-  LOGOUT_USER
+  LOGOUT_USER,
+  SET_TOKEN
  } from '../actions/constants';
 
 const INITIAL_STATE = {
@@ -54,6 +55,8 @@ export default (state = INITIAL_STATE, action) => {
           uid: info.uid,
           token: info.token
         };
+      case SET_TOKEN:
+        return { ...state, token: info };
       case LOGOUT_USER:
         return INITIAL_STATE;
      default:

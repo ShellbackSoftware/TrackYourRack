@@ -46,6 +46,10 @@ class LoginScreen extends React.Component {
     return (
       <Card>
         <CardSection>
+          <Text>Welcome to Track Your Rack! Please log in to continue.</Text>
+        </CardSection>
+
+        <CardSection>
           <Input
             label="Username"
             onChangeText={this.onUsernameChange.bind(this)}
@@ -66,6 +70,11 @@ class LoginScreen extends React.Component {
 
         <CardSection>
           {this.renderButton()}
+        </CardSection>
+
+        <CardSection>
+          <Text>Forgot your password?</Text>
+          <Text>Need an account?</Text>
         </CardSection>
       </Card>
     );

@@ -2,11 +2,20 @@ import React from 'react';
 import { Text, StyleSheet, Modal, View, TouchableWithoutFeedback, Image } from 'react-native';
 import { connect } from 'react-redux';
 import { ImagePicker } from 'expo';
-import { deleteList } from '../../actions';
-import { CardSection, Button, Input } from '../common';
+import { deleteList, addSinglePolish } from '../../actions';
+import { CardSection, Button, Input, Spinner } from '../common';
 
 class AddPolishScreen extends React.Component {
-  state = { error: false, pSwatch: null };
+  state = {
+      error: false,
+      pCollection: '',
+      pNumber: '',
+      pFinish: '',
+      pSeason: '',
+      pYear: '',
+      pSite: '',
+      pSwatch: null,
+      uid: this.props.uid };
 
   ontextChange(field, value) {
     this.setState({ [field]: value });
@@ -18,7 +27,7 @@ class AddPolishScreen extends React.Component {
         || (!this.state.pBrand || this.state.pBrand.trim() === '')) {
       this.setState({ error: true, errorMsg: 'Polish Name and Brand are required!' });
     } else {
-      console.log('All good, add it!');
+      this.props.addSinglePolish(this.state, this.props.token);
     }
   }
 
@@ -34,16 +43,15 @@ class AddPolishScreen extends React.Component {
   }
 
   renderError() {
-    // TODO: Connect to props and send an error if API returns one
-   /* if (this.props.error) {
+    if (this.props.uploadError) {
       return (
         <View style={{ backgroundColor: 'white' }}>
             <Text style={styles.errorTextStyle}>
-              {this.props.error}
+              {this.props.uploadError}
             </Text>
         </View>
       );
-    } */
+    }
 
     if (this.state.error) {
       return (
@@ -57,6 +65,15 @@ class AddPolishScreen extends React.Component {
   }
 
   renderForm() {
+    if (this.props.loadingCreate) {
+      return (
+        <CardSection>
+          <Text>Creating polish, please wait.</Text>
+          <Spinner />
+        </CardSection>
+      );
+    }
+
     const {
       titleStyle,
       sectionStyle,
@@ -221,10 +238,11 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  const { uid } = state.auth;
-  return { uid };
+  const { uid, token } = state.auth;
+  const { loadingCreate, loadingImage, uploadError } = state.polish;
+  return { uid, token, loadingCreate, loadingImage, uploadError };
 };
 
 export default connect(mapStateToProps, {
-  deleteList
+  deleteList, addSinglePolish
 })(AddPolishScreen);

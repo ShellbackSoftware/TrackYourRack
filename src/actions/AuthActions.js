@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { SecureStore } from 'expo';
 import NavigationService from '../components/helpers/NavigationService';
 import {
@@ -8,7 +9,8 @@ import {
     LOGIN_USER,
     SITE_BASE,
     AUTHENTICATE_USER,
-    LOGOUT_USER
+    LOGOUT_USER,
+    SET_TOKEN
 } from './constants';
 
 export const usernameChanged = (text) => {
@@ -42,6 +44,25 @@ export const loginUser = ({ username, password }) => {
     .then(res => res.json())
     .then(resData => loginUserSuccess(dispatch, resData))
     .catch(() => dispatch(loginUserFail(dispatch)));
+  };
+};
+
+export const setUserToken = () => {
+  return (dispatch) => {
+    const gotToken = fetch(`${SITE_BASE}/session/token`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+    .then(res => {
+      dispatch({
+        type: SET_TOKEN,
+        payload: res._bodyText
+      });
+    });
+
+    return gotToken;
   };
 };
 
