@@ -1,6 +1,4 @@
 import {
-  START_IMAGE_UPLOAD,
-  FINISH_IMAGE_UPLOAD,
   START_SINGLE_UPLOAD,
   FINISH_SINGLE_UPLOAD,
   UPLOAD_ERROR
@@ -9,20 +7,17 @@ import {
 const INITIAL_STATE = {
   loadingImage: false,
   loadingCreate: false,
-  uploadError: ''
+  uploadError: '',
+  fromUpload: true
 };
 
 export default (state = INITIAL_STATE, action) => {
   const info = action.payload;
   switch (action.type) {
-    case START_IMAGE_UPLOAD:
-      return { ...state, loadingImage: true, uploadError: '' };
     case START_SINGLE_UPLOAD:
-      return { ...state, loadingCreate: true, uploadError: '' };
-    case FINISH_IMAGE_UPLOAD:
-      return { ...state, loadingImage: false };
+      return { ...state, loadingCreate: true, uploadError: '', fromUpload: false };
     case FINISH_SINGLE_UPLOAD:
-      return { ...state, loadingCreate: false };
+      return { ...state, loadingCreate: false, fromUpload: true };
     case UPLOAD_ERROR:
       return { ...state, uploadError: info };
     default:

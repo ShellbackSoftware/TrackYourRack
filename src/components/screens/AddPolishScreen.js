@@ -15,7 +15,9 @@ class AddPolishScreen extends React.Component {
       pYear: '',
       pSite: '',
       pSwatch: null,
-      uid: this.props.uid };
+      uid: this.props.uid,
+      filename: ''
+    };
 
   ontextChange(field, value) {
     this.setState({ [field]: value });
@@ -27,18 +29,21 @@ class AddPolishScreen extends React.Component {
         || (!this.state.pBrand || this.state.pBrand.trim() === '')) {
       this.setState({ error: true, errorMsg: 'Polish Name and Brand are required!' });
     } else {
-      this.props.addSinglePolish(this.state, this.props.token);
+      this.props.addSinglePolish(this.state, this.props.token, 'Home');
     }
   }
 
   async pickImage() {
     const result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
+      mediaTypes: 'Images',
+      base64: true
     });
 
-    console.log(result);
     if (!result.cancelled) {
-      this.setState({ pSwatch: result.uri });
+      const fileuri = result.uri;
+      const filename = fileuri.substring(fileuri.indexOf('ImagePicker') + 12);
+      this.setState({ pSwatch: result.base64, filename, fileuri });
     }
   }
 
@@ -161,7 +166,7 @@ class AddPolishScreen extends React.Component {
 
         <CardSection style={sectionStyle}>
           {this.state.pSwatch &&
-            <Image source={{ uri: this.state.pSwatch }} style={imageStyle} />}
+            <Image source={{ uri: this.state.fileuri }} style={imageStyle} />}
           <Button
             style={uploadBtnStyle}
             onPress={() => this.pickImage()}

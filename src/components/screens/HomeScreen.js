@@ -1,7 +1,13 @@
 import React from 'react';
 import { Text, BackHandler } from 'react-native';
 import { connect } from 'react-redux';
-import { getUserLists, clearListname, openModal, closeModal } from '../../actions';
+import {
+    getUserLists,
+    clearListname,
+    openModal,
+    closeModal,
+    getAllPolishes
+  } from '../../actions';
 import { Card, CardSection, Spinner } from '../common';
 import CustomListsList from '../CustomListsList';
 import AddCustomList from '../AddCustomList';
@@ -18,6 +24,9 @@ class HomeScreen extends React.Component {
 
   willFocus = this.props.navigation.addListener('willFocus', () => {
       this.props.getUserLists(this.props.uid);
+      if (this.props.fromUpload) {
+        this.props.getAllPolishes();
+      }
     }
   );
 
@@ -68,9 +77,10 @@ const mapStateToProps = state => {
   const { username, uid } = state.auth;
   const { loadingLists, showModal, userLists } = state.lists;
   const { loadingPolish } = state.polishes;
-  return { username, loadingLists, uid, showModal, userLists, loadingPolish };
+  const { fromUpload } = state.polish;
+  return { username, loadingLists, uid, showModal, userLists, loadingPolish, fromUpload };
 };
 
 export default connect(mapStateToProps, {
-  getUserLists, clearListname, openModal, closeModal
+  getUserLists, clearListname, openModal, closeModal, getAllPolishes
 })(HomeScreen);

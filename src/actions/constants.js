@@ -35,8 +35,6 @@ export const ADD_SEL_POLISH = 'add_sel_polish';
 export const REM_SEL_POLISH = 'rem_sel_polish';
 
 // Polish upload stuff
-export const START_IMAGE_UPLOAD = 'start_image_upload';
-export const FINISH_IMAGE_UPLOAD = 'finish_image_upload';
 export const START_SINGLE_UPLOAD = 'start_single_upload';
 export const FINISH_SINGLE_UPLOAD = 'finish_single_upload';
 export const UPLOAD_ERROR = 'upload_error';
