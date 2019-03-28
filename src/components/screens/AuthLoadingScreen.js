@@ -13,7 +13,7 @@ class AuthLoadingScreen extends React.Component {
     this._bootstrapAsync();
   }
 
-  state = { token: '', uid: '', username: '' };
+  state = { token: '', uid: '', username: '', lotoken: '' };
 
   willFocus = this.props.navigation.addListener('willFocus', () => {
       this._bootstrapAsync();
@@ -21,8 +21,8 @@ class AuthLoadingScreen extends React.Component {
   );
 
   _bootstrapAsync = async () => {
-    /*const tokenPromise = SecureStore.getItemAsync('token')
-      .then(token => this.setState({ token }));*/
+    const lotokenPromise = SecureStore.getItemAsync('lotoken')
+      .then(token => this.setState({ token }));
     const tokenPromise = this.props.setUserToken()
       .then(() => this.setState({ token: this.props.token }));
     const namePromise = SecureStore.getItemAsync('username')
@@ -30,14 +30,16 @@ class AuthLoadingScreen extends React.Component {
     const uidPromise = SecureStore.getItemAsync('uid')
       .then(uid => this.setState({ uid }));
     const polishesPromise = this.props.getAllPolishes();
-    Promise.all([tokenPromise, namePromise, uidPromise, polishesPromise])
+    Promise.all([lotokenPromise, tokenPromise, namePromise, uidPromise, polishesPromise])
     .then(() => {
       const userObj = {
         username: this.state.username,
         uid: this.state.uid,
-        token: this.state.token
+        token: this.state.token,
+        lotoken: this.state.lotoken
       };
-      if (userObj.username === null || userObj.uid === null || userObj.token === null) {
+      if (userObj.username === null || userObj.uid === null ||
+          userObj.token === null || userObj.lotoken === null) {
         NavigationService.navigate('Login');
       } else {
         this.props.authenticateUser(userObj);

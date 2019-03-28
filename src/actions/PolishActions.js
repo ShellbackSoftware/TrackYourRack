@@ -119,6 +119,7 @@ export const addPolishToList = (uid, listid, pID, route) => {
     })
     .then(() => {
       dispatch({ type: FINISH_API_CALL });
+      dispatch({ type: CLEAR_EDIT_MODE });
       NavigationService.navigate(route);
     });
   };

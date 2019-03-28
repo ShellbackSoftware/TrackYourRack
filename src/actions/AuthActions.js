@@ -75,15 +75,15 @@ export const authenticateUser = (user) => {
   };
 };
 
-export const logoutUser = (token) => {
+export const logoutUser = (lotoken) => {
   return (dispatch) => {
     dispatch({ type: LOGOUT_USER });
     // Log user out from Drupal
-    fetch(`${SITE_BASE}/user/logout?_format=json`, {
+    fetch(`${SITE_BASE}/user/logout?_format=json&token=${lotoken}`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'X-CSRF-Token': token
+        'Content-Type': 'application/json'//,
+        //'X-CSRF-Token': token
       },
     })
     .then(res => res.json())
@@ -91,7 +91,8 @@ export const logoutUser = (token) => {
       const tokenPromise = SecureStore.deleteItemAsync('token');
       const namePromise = SecureStore.deleteItemAsync('username');
       const uidPromise = SecureStore.deleteItemAsync('uid');
-      Promise.all([tokenPromise, namePromise, uidPromise])
+      const lotokenPromise = SecureStore.deleteItemAsync('lotoken');
+      Promise.all([tokenPromise, namePromise, uidPromise, lotokenPromise])
       .then(() => NavigationService.navigate('Login'));
     });
   };
@@ -103,10 +104,11 @@ const loginUserSuccess = (dispatch, user) => {
         payload: user
     });
     // user = {csrf_token, current_user { name, uid }, logout_token }
+    const lotokenPromise = SecureStore.setItemAsync('lotoken', user.logout_token);
     const tokenPromise = SecureStore.setItemAsync('token', user.csrf_token);
     const namePromise = SecureStore.setItemAsync('username', user.current_user.name);
     const uidPromise = SecureStore.setItemAsync('uid', user.current_user.uid);
-    Promise.all([tokenPromise, namePromise, uidPromise])
+    Promise.all([lotokenPromise, tokenPromise, namePromise, uidPromise])
     .then(() => NavigationService.navigate('Auth'));
 };
 

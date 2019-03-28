@@ -9,6 +9,18 @@ import {
 } from './constants';
 // eslint-disable-next-line
 export const addSinglePolish = (polish, token, route) => {
+  const {
+      uid,
+      pBrand,
+      pName,
+      pNumber,
+      pSeason,
+      pCollection,
+      pYear,
+      pSwatch,
+      pFinish,
+      pSite
+    } = polish;
   return (dispatch) => {
     console.log(`Token: ${token}`);
     console.log(polish);
@@ -20,10 +32,19 @@ export const addSinglePolish = (polish, token, route) => {
         'X-CSRF-Token': token
       },
       body: JSON.stringify({
-        polish
+        uid,
+        pBrand,
+        pName,
+        pNumber,
+        pSeason,
+        pCollection,
+        pYear,
+        pSwatch,
+        pFinish,
+        pSite
       })
     })
-    .then(res => res.json())/*{
+    .then(res => res.json()) /*{
       if (!res.ok) {
         dispatch({ type: FINISH_SINGLE_UPLOAD });
         dispatch({ type: UPLOAD_ERROR, payload: 'An error has occurred, please try again.' });

@@ -10,19 +10,16 @@ class HomeScreen extends React.Component {
   componentDidMount() {
     this.props.getUserLists(this.props.uid);
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
-    this.subs = [
-      this.props.navigation.addListener('didFocus', (payload) => this.componentDidFocus(payload)),
-    ];
   }
 
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
-    this.subs.forEach(sub => sub.remove());
   }
 
-  componentDidFocus() {
-    this.props.getUserLists(this.props.uid);
-  }
+  willFocus = this.props.navigation.addListener('willFocus', () => {
+      this.props.getUserLists(this.props.uid);
+    }
+  );
 
   handleBackButtonClick = () => {
     return true;

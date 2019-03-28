@@ -16,7 +16,8 @@ import {
   searchtermChanged,
   openModal,
   closeModal,
-  removePolishFromList
+  removePolishFromList,
+  clearEditMode
   } from '../../actions';
 import { Card, CardSection, Spinner, Button } from '../common';
 import PolishListItem from './polish/PolishListItem';
@@ -49,7 +50,6 @@ class PolishListScreen extends React.Component {
   componentDidUpdate(prevProps) {
     if ((this.props.curPolishes !== prevProps.curPolishes) && (this.state.listid > 0)) {
       this.getListContent();
-      console.log('Back from adding');
     }
   }
 
@@ -75,6 +75,7 @@ class PolishListScreen extends React.Component {
     this.props.selectedPolishes.map((p) => {
       this.props.removePolishFromList(uid, listid, p, this.state.listname);
     });
+    this.props.clearEditMode();
   }
 
   getListContent() {
@@ -82,6 +83,14 @@ class PolishListScreen extends React.Component {
     const polishes = _.intersectionBy(allPolishes, curPolishes, 'pID');
     this.setState({ polishes, tempPolishes: polishes });
   }
+
+  willFocus = this.props.navigation.addListener('willFocus', () => {
+    this.props.clearEditMode();
+      if (this.state.listid > 0) {
+        this.props.getPolishList(this.state.listid);
+      }
+    }
+  );
 
   toggleModal() {
     if (this.props.showModal) {
@@ -229,5 +238,6 @@ export default connect(mapStateToProps, {
   searchtermChanged,
   openModal,
   closeModal,
-  removePolishFromList
+  removePolishFromList,
+  clearEditMode
 })(PolishListScreen);
