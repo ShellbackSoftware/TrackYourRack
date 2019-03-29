@@ -143,7 +143,8 @@ class PolishListScreen extends React.Component {
   }
 
   renderScrollButton() {
-    return (
+    if (this.state.tempPolishes.length > 0) {
+      return (
         <Icon
           raised
           name='angle-double-up'
@@ -153,7 +154,8 @@ class PolishListScreen extends React.Component {
           underlayColor={'#00BCD6'}
           color='#00BCD6'
         />
-    );
+      );
+    }
   }
 
   render() {

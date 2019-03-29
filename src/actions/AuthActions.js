@@ -10,7 +10,8 @@ import {
     SITE_BASE,
     AUTHENTICATE_USER,
     LOGOUT_USER,
-    SET_TOKEN
+    SET_TOKEN,
+    REGISTER_USER
 } from './constants';
 
 export const usernameChanged = (text) => {
@@ -45,6 +46,54 @@ export const loginUser = ({ username, password }) => {
     .then(resData => loginUserSuccess(dispatch, resData))
     .catch(() => dispatch(loginUserFail(dispatch)));
   };
+};
+
+export const resetPassword = ({ mail }) => {
+  return (dispatch) => {
+    fetch(`${SITE_BASE}/user/lost-password?_format=json`)
+  };
+};
+
+export const registerUser = ({ mail, name, pass }) => {
+  return (dispatch) => {
+    dispatch({ type: LOGIN_USER });
+
+    fetch(`${SITE_BASE}/user/register?_format=json`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: { value: name },
+        mail: { value: mail },
+        pass: { value: pass },
+      }),
+    })
+    .then(res => { console.log(res); return res.json(); })
+    .then(resData => console.log(resData))//registerSuccess(dispatch, resData))
+    .catch(() => dispatch(registerFail(dispatch)));
+  };
+};
+// eslint-disable-next-line
+const registerSuccess = (user) => {
+  console.log(user);
+  return (dispatch) => {
+    dispatch({
+      type: REGISTER_USER,
+      payload: user
+    });
+
+    const lotokenPromise = SecureStore.setItemAsync('lotoken', user.logout_token);
+    const tokenPromise = SecureStore.setItemAsync('token', user.csrf_token);
+    const namePromise = SecureStore.setItemAsync('username', user.current_user.name);
+    const uidPromise = SecureStore.setItemAsync('uid', user.current_user.uid);
+    Promise.all([lotokenPromise, tokenPromise, namePromise, uidPromise])
+    .then(() => NavigationService.navigate('Login'));
+  };
+};
+
+const registerFail = (dispatch) => {
+  dispatch({ type: LOGIN_USER_FAIL });
 };
 
 export const setUserToken = () => {

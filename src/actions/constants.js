@@ -11,6 +11,7 @@ export const LOGIN_USER = 'login_user';
 export const AUTHENTICATE_USER = 'authenticate_user';
 export const LOGOUT_USER = 'logout_user';
 export const SET_TOKEN = 'set_token';
+export const REGISTER_USER = 'register_user';
 
 // Home page
 export const SELECT_LIST = 'select_list';

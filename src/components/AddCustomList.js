@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, StyleSheet, Modal, View, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
-import { listnameChanged, createList } from '../actions';
+import { listnameChanged, createList, getUserLists } from '../actions';
 import { CardSection, Button, Input } from './common';
 
 class AddCustomList extends React.Component {
@@ -18,7 +18,8 @@ class AddCustomList extends React.Component {
     } else if (this.props.userLists.some(list => list.listname === this.props.listname.trim())) {
       this.setState({ error: true, errorMsg: 'This list already exists!' });
     } else {
-      this.props.createList(this.props.uid, this.props.listname);
+      const listPromise = this.props.createList(this.props.uid, this.props.listname);
+      Promise.all([listPromise]).then(this.props.getUserLists(this.props.uid));
     }
   }
 
@@ -123,5 +124,5 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps, {
-  createList, listnameChanged
+  createList, listnameChanged, getUserLists
 })(AddCustomList);
