@@ -48,6 +48,12 @@ class SideMenu extends React.Component {
         </SideMenuItem>
 
         <SideMenuItem
+          onPress={() => this.onItemSelect('About')}
+        >
+          About
+        </SideMenuItem>
+
+        <SideMenuItem
           onPress={() => this.logout()}
         >
           Log Out

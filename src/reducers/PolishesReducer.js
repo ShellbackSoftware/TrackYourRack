@@ -32,7 +32,7 @@ export default (state = INITIAL_STATE, action) => {
     case ALL_POLISHES:
       return { ...state, allPolishes: info, loadingPolish: false };
     case CLEAR_POLISH_STATE:
-      return { ...state, curPolishes: [] };
+      return { ...state, curPolishes: [], selectedPolishes: [] };
     case SEARCH_TERM_CHANGED:
       return { ...state, searchTerm: info };
     case SET_EDIT_MODE:

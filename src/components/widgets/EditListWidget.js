@@ -79,6 +79,17 @@ class EditListWidget extends React.Component {
     );
   }
 
+  renderFooter() {
+    if (this.props.editMode) {
+      return (
+        <View style={{ flex: 1, flexDirection: 'row' }}>
+          <Button onPress={() => this.saveChanges()}>Add Selected Polishes</Button>
+          <Button onPress={() => this.onCancelPress()}>Cancel</Button>
+        </View>
+      );
+    }
+  }
+
   renderItem(polishList) {
     return <PolishListItem polishItem={polishList.item} />;
   }
@@ -127,8 +138,7 @@ class EditListWidget extends React.Component {
           </CardSection>
 
         <CardSection style={footerStyle}>
-          <Button onPress={() => this.saveChanges()}>Add Selected Polishes</Button>
-          <Button onPress={() => this.onCancelPress()}>Cancel</Button>
+          {this.renderFooter()}
         </CardSection>
       </View>
     );
@@ -168,8 +178,9 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   const { uid } = state.auth;
-  const { allPolishes, curPolishes, searchTerm, loadingPolish, selectedPolishes } = state.polishes;
-  return { uid, allPolishes, curPolishes, searchTerm, loadingPolish, selectedPolishes };
+  const { allPolishes, curPolishes, searchTerm, loadingPolish,
+          selectedPolishes, editMode } = state.polishes;
+  return { uid, allPolishes, curPolishes, searchTerm, loadingPolish, selectedPolishes, editMode };
 };
 
 export default connect(mapStateToProps, {

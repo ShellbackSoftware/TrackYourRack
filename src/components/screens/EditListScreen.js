@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, StyleSheet, Modal, View, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
-import { deleteList } from '../../actions';
+import { deleteList, clearPolishState } from '../../actions';
 import { CardSection, Button } from '../common';
 import EditListWidget from '../widgets/EditListWidget';
 
@@ -14,6 +14,11 @@ class EditListScreen extends React.Component {
     const curList = this.props.navigation.getParam('curList', 'List');
     this.props.deleteList(this.props.uid, curList.listID);
   }
+
+  willBlur = this.props.navigation.addListener('willBlur', () => {
+      this.props.clearPolishState();
+    }
+  );
 
   renderWidget() {
     return (
@@ -31,9 +36,6 @@ class EditListScreen extends React.Component {
     } = styles;
     const { navigation } = this.props;
     const curList = navigation.getParam('curList', 'List');
-    /*if (curList.listname === 'All Polishes') {
-      return this.renderAllPolishes();
-    }*/
     if (this.state.editList) {
       return this.renderWidget();
     }
@@ -123,5 +125,5 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps, {
-  deleteList
+  deleteList, clearPolishState
 })(EditListScreen);

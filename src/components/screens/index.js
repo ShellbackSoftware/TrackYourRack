@@ -8,3 +8,4 @@ export { default as ProfileScreen } from './ProfileScreen';
 export { default as ScannerScreen } from './ScannerScreen';
 export { default as EditListScreen } from './EditListScreen';
 export { default as AddPolishScreen } from './AddPolishScreen';
+export { default as AboutScreen } from './AboutScreen';

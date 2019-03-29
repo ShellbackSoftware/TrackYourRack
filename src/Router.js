@@ -21,7 +21,8 @@ import {
   ChatScreen,
   ScannerScreen,
   EditListScreen,
-  AddPolishScreen
+  AddPolishScreen,
+  AboutScreen
 } from './components/screens';
 
 const DrawerNav = createDrawerNavigator(
@@ -31,6 +32,7 @@ const DrawerNav = createDrawerNavigator(
     Following: FollowingScreen,
     Chat: ChatScreen,
     Scanner: ScannerScreen,
+    About: AboutScreen,
   },
   {
     contentComponent: SideMenu,

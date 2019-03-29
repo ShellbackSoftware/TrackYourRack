@@ -72,10 +72,14 @@ class PolishListScreen extends React.Component {
     const uid = this.props.uid;
     const listid = this.state.listid;
     // eslint-disable-next-line
-    this.props.selectedPolishes.map((p) => {
+    const removedPromise = this.props.selectedPolishes.map((p) => {
       this.props.removePolishFromList(uid, listid, p, this.state.listname);
     });
-    this.props.clearEditMode();
+    Promise.all([removedPromise])
+    .then(() => {
+      this.props.getPolishList(listid);
+      this.props.clearEditMode();
+    });
   }
 
   getListContent() {
@@ -86,8 +90,10 @@ class PolishListScreen extends React.Component {
 
   willFocus = this.props.navigation.addListener('willFocus', () => {
     this.props.clearEditMode();
+    this.props.clearPolishState();
       if (this.state.listid > 0) {
-        this.props.getPolishList(this.state.listid);
+        const listPromise = this.props.getPolishList(this.state.listid);
+        Promise.all([listPromise]).then(this.getListContent());
       }
     }
   );

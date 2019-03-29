@@ -141,6 +141,7 @@ export const removePolishFromList = (uid, listid, pID, route) => {
     })
     .then(() => {
       dispatch({ type: FINISH_API_CALL });
+      dispatch({ type: CLEAR_POLISH_STATE });
       NavigationService.navigate(route);
     });
   };
