@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, BackHandler } from 'react-native';
 import { connect } from 'react-redux';
+import NavigationService from '../helpers/NavigationService';
 import {
     getUserLists,
     clearListname,
@@ -10,7 +11,7 @@ import {
   } from '../../actions';
 import { Card, CardSection, Spinner } from '../common';
 import CustomListsList from '../CustomListsList';
-import AddCustomList from '../AddCustomList';
+//import AddCustomList from './AddCustomListScreen';
 
 class HomeScreen extends React.Component {
   componentDidMount() {
@@ -34,14 +35,15 @@ class HomeScreen extends React.Component {
     return true;
   }
 
-  toggleModal() {
+  /*toggleModal() {
     this.props.clearListname();
     if (this.props.showModal) {
+      this.props.getUserLists(this.props.uid);
       this.props.closeModal('Home');
     } else {
       this.props.openModal();
     }
-  }
+  }*/
 
   renderLists() {
     if (this.props.loadingLists) {
@@ -49,7 +51,8 @@ class HomeScreen extends React.Component {
     }
     return (
       <CustomListsList
-        onPress={() => this.toggleModal()}
+        onPress={() => NavigationService.navigate('AddCustomList')}
+        //onPress={() => this.toggleModal()}
       />
     );
   }
@@ -64,10 +67,10 @@ class HomeScreen extends React.Component {
 
         {this.renderLists()}
 
-        <AddCustomList
+        {/*<AddCustomList
           visible={this.props.showModal}
           closeModal={this.toggleModal.bind(this)}
-        />
+        />*/}
       </Card>
     );
   }

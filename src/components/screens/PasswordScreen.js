@@ -1,3 +1,4 @@
+/* eslint-disable max-len, no-useless-escape */
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
@@ -7,29 +8,26 @@ import { Button, Card, CardSection, Input, Spinner } from '../common';
 class PasswordScreen extends React.Component {
   state = {
     mail: '',
-    name: '',
-    pass: '',
-    vPass: '',
     errorMsg: ''
   };
 
-  ontextChange(field, value) {
-    this.setState({ [field]: value });
+  ontextChange(text) {
+    this.setState({ mail: text });
   }
 
   onButtonPress() {
     this.setState({ errorMsg: '' });
-    if (this.verifyPassword()) {
-      const { name, mail, pass } = this.props;
-      this.props.registerUser({ name, mail, pass });
+    if (this.verifyMail()) {
+      this.props.resetPassword(this.state.mail);
     } else {
-      this.setState({ errorMsg: 'Passwords must match!' });
-      console.log('Incorrect password');
+      this.setState({ errorMsg: 'Please enter a valid email!' });
     }
   }
 
-  verifyPassword() {
-    return this.state.pass === this.state.vPass;
+  verifyEmail() {
+    const exp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    return exp.test(this.state.mail);
   }
 
   renderMessage() {
@@ -42,7 +40,7 @@ class PasswordScreen extends React.Component {
               </View>
           );
       }
-      if (this.state.error) {
+      if (this.state.errorMsg) {
         return (
             <View style={{ backgroundColor: 'white' }}>
                 <Text style={styles.errorTextStyle}>
@@ -54,7 +52,7 @@ class PasswordScreen extends React.Component {
       if (this.props.message) {
         return (
           <View style={{ backgroundColor: 'white' }}>
-              <Text style={styles.errorTextStyle}>
+              <Text style={styles.msgTextStyle}>
                 {this.props.message}
               </Text>
           </View>
@@ -69,7 +67,7 @@ class PasswordScreen extends React.Component {
 
       return (
         <Button onPress={this.onButtonPress.bind(this)}>
-          Submit Registration
+          Reset Password
         </Button>
       );
   }
@@ -84,7 +82,7 @@ class PasswordScreen extends React.Component {
         <CardSection>
           <Input
             label="Email"
-            onChangeText={this.onEmailChange.bind(this)}
+            onChangeText={this.ontextChange.bind(this)}
             value={this.state.mail}
           />
         </CardSection>
@@ -104,6 +102,10 @@ const styles = StyleSheet.create({
       fontSize: 20,
       alignSelf: 'center',
       color: 'red'
+  },
+  msgTextStyle: {
+    fontSize: 20,
+    alignSelf: 'center'
   }
 });
 

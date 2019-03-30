@@ -49,9 +49,7 @@ export const loginUser = ({ username, password }) => {
 };
 
 export const resetPassword = ({ mail }) => {
-  return (dispatch) => {
-    fetch(`${SITE_BASE}/user/lost-password?_format=json`)
-  };
+  console.log(mail);
 };
 
 export const registerUser = ({ mail, name, pass }) => {

@@ -24,7 +24,8 @@ import {
   AddPolishScreen,
   AboutScreen,
   RegisterScreen,
-  PasswordScreen
+  PasswordScreen,
+  AddCustomListScreen
 } from './components/screens';
 
 const DrawerNav = createDrawerNavigator(
@@ -46,18 +47,8 @@ const AuthStack = createStackNavigator(
   {
     Auth: AuthLoadingScreen,
     Login: LoginScreen,
-    // Register new account
-    Register: {
-      screen: RegisterScreen,
-      mode: 'modal',
-      headerMode: 'none'
-    },
-    // Forgot password
-    Password: {
-      screen: PasswordScreen,
-      mode: 'modal',
-      headerMode: 'none'
-    },
+    /*Register: RegisterScreen,
+    Password: PasswordScreen,*/
   },
   {
     initialRouteName: 'Auth',
@@ -78,10 +69,6 @@ const RootStack = createStackNavigator(
   {
     loginFlow: {
       screen: AuthStack,
-      navigationOptions: {
-        headerLeft: null,
-        headerRight: null
-      }
     },
     mainFlow: {
       screen: DrawerNav,
@@ -116,6 +103,21 @@ const RootStack = createStackNavigator(
     },
     AddPolish: {
       screen: AddPolishScreen,
+      mode: 'modal',
+      headerMode: 'none'
+    },
+    Register: {
+      screen: RegisterScreen,
+      mode: 'modal',
+      headerMode: 'none'
+    },
+    Password: {
+      screen: PasswordScreen,
+      mode: 'modal',
+      headerMode: 'none'
+    },
+    AddCustomList: {
+      screen: AddCustomListScreen,
       mode: 'modal',
       headerMode: 'none'
     },

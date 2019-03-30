@@ -8,3 +8,4 @@ export * from './Confirm';
 export * from './HeaderMenuButton';
 export * from './EditListButton';
 export * from './AddPolishButton';
+export { default as A } from './A';

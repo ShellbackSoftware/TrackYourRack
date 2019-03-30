@@ -1,10 +1,11 @@
 import React from 'react';
 import { Text, StyleSheet, Modal, View, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
-import { listnameChanged, createList, getUserLists } from '../actions';
-import { CardSection, Button, Input } from './common';
+import NavigationService from '../helpers/NavigationService';
+import { listnameChanged, createList, getUserLists } from '../../actions';
+import { CardSection, Button, Input } from '../common';
 
-class AddCustomList extends React.Component {
+class AddCustomListScreen extends React.Component {
   state = { error: false };
 
   onListnameChange(text) {
@@ -19,7 +20,7 @@ class AddCustomList extends React.Component {
       this.setState({ error: true, errorMsg: 'This list already exists!' });
     } else {
       const listPromise = this.props.createList(this.props.uid, this.props.listname);
-      Promise.all([listPromise]).then(this.props.getUserLists(this.props.uid));
+      Promise.all([listPromise]).then(() => NavigationService.navigate('Home'));
     }
   }
 
@@ -41,16 +42,14 @@ class AddCustomList extends React.Component {
       containerStyle,
       sectionStyle,
     } = styles;
-    const { visible, closeModal } = this.props;
 
     return (
       <Modal
-      visible={visible}
       transparent
       animationType='slide'
       onRequestClose={() => {}}
       >
-      <TouchableWithoutFeedback onPress={closeModal}>
+      <TouchableWithoutFeedback onPress={() => NavigationService.navigate('Home')}>
       <View style={containerStyle}>
       <TouchableWithoutFeedback>
       <View>
@@ -71,7 +70,7 @@ class AddCustomList extends React.Component {
 
         <CardSection>
           <Button onPress={this.onButtonPress.bind(this)}> Save List </Button>
-          <Button onPress={closeModal}> Cancel </Button>
+          <Button onPress={() => NavigationService.navigate('Home')}> Cancel </Button>
         </CardSection>
       </View>
       </TouchableWithoutFeedback>
@@ -125,4 +124,4 @@ const mapStateToProps = state => {
 
 export default connect(mapStateToProps, {
   createList, listnameChanged, getUserLists
-})(AddCustomList);
+})(AddCustomListScreen);

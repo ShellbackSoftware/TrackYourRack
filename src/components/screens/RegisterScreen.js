@@ -1,7 +1,8 @@
+/* eslint-disable max-len, no-useless-escape */
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
-import { usernameChanged, passwordChanged, loginUser } from '../../actions';
+import { usernameChanged, passwordChanged, registerUser } from '../../actions';
 import { Button, Card, CardSection, Input, Spinner } from '../common';
 
 class RegisterScreen extends React.Component {
@@ -10,7 +11,8 @@ class RegisterScreen extends React.Component {
     name: '',
     pass: '',
     vPass: '',
-    errorMsg: ''
+    errorMsg: '',
+    message: ''
   };
 
   ontextChange(field, value) {
@@ -19,20 +21,32 @@ class RegisterScreen extends React.Component {
 
   onButtonPress() {
     this.setState({ errorMsg: '' });
-    if (this.verifyPassword()) {
+    if (this.verifyInput()) {
       const { name, mail, pass } = this.props;
       this.props.registerUser({ name, mail, pass });
-    } else {
-      this.setState({ errorMsg: 'Passwords must match!' });
-      console.log('Incorrect password');
     }
   }
 
-  verifyPassword() {
-    return this.state.pass === this.state.vPass;
+  verifyInput() {
+    const exp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    if (!exp.test(this.state.mail)) {
+      this.setState({ errorMsg: 'Please enter a valid email.' });
+      return false;
+    }
+    if (!this.state.name) {
+      this.setState({ errorMsg: 'Please enter a username.' });
+      return false;
+    }
+    if (this.state.pass !== this.state.vPass || this.state.pass === '' || !this.state.vPass) {
+      this.setState({ errorMsg: 'Passwords don\'t match.' });
+      return false;
+    }
+
+    return true;
   }
 
-  renderError() {
+  renderMessage() {
       if (this.props.error) {
           return (
               <View style={{ backgroundColor: 'white' }}>
@@ -43,13 +57,23 @@ class RegisterScreen extends React.Component {
           );
       }
 
-      if (this.state.error) {
+      if (this.state.errorMsg) {
         return (
             <View style={{ backgroundColor: 'white' }}>
                 <Text style={styles.errorTextStyle}>
                   {this.state.errorMsg}
                 </Text>
             </View>
+        );
+      }
+
+      if (this.state.message) {
+        return (
+          <View style={{ backgroundColor: 'white' }}>
+              <Text style={styles.errorTextStyle}>
+                {this.state.message}
+              </Text>
+          </View>
         );
       }
   }
@@ -76,7 +100,7 @@ class RegisterScreen extends React.Component {
         <CardSection>
           <Input
             label="Email"
-            onChangeText={this.onEmailChange.bind(this)}
+            onChangeText={this.ontextChange.bind(this, 'mail')}
             value={this.state.mail}
           />
         </CardSection>
@@ -84,7 +108,7 @@ class RegisterScreen extends React.Component {
         <CardSection>
           <Input
             label="Username"
-            onChangeText={this.onUsernameChange.bind(this)}
+            onChangeText={this.ontextChange.bind(this, 'name')}
             value={this.state.name}
           />
         </CardSection>
@@ -93,7 +117,7 @@ class RegisterScreen extends React.Component {
           <Input
               secureTextEntry
               label="Password"
-              onChangeText={this.onPasswordChange.bind(this)}
+              onChangeText={this.ontextChange.bind(this, 'pass')}
               value={this.state.pass}
           />
         </CardSection>
@@ -102,20 +126,15 @@ class RegisterScreen extends React.Component {
           <Input
               secureTextEntry
               label="Verify Password"
-              onChangeText={this.onvPasswordChange.bind(this)}
+              onChangeText={this.ontextChange.bind(this, 'vPass')}
               value={this.state.vPass}
           />
         </CardSection>
 
-        {this.renderError()}
+        {this.renderMessage()}
 
         <CardSection>
           {this.renderButton()}
-        </CardSection>
-
-        <CardSection>
-          <Text>Forgot your password?</Text>
-          <Text>Need an account?</Text>
         </CardSection>
       </Card>
     );
@@ -138,5 +157,5 @@ const mapStateToProps = state => {
 export default connect(mapStateToProps, {
   usernameChanged,
   passwordChanged,
-  loginUser
+  registerUser
 })(RegisterScreen);

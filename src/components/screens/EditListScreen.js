@@ -112,7 +112,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0
   },
   dangerStyle: {
-    borderColor: 'red'
+    borderColor: 'red',
+    backgroundColor: '#fff'
   },
   dangerTextStyle: {
     color: 'red'
