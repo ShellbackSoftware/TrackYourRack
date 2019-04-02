@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, BackHandler } from 'react-native';
+import { Text, BackHandler, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 import NavigationService from '../helpers/NavigationService';
 import {
@@ -11,7 +11,6 @@ import {
   } from '../../actions';
 import { Card, CardSection, Spinner } from '../common';
 import CustomListsList from '../CustomListsList';
-//import AddCustomList from './AddCustomListScreen';
 
 class HomeScreen extends React.Component {
   componentDidMount() {
@@ -35,16 +34,6 @@ class HomeScreen extends React.Component {
     return true;
   }
 
-  /*toggleModal() {
-    this.props.clearListname();
-    if (this.props.showModal) {
-      this.props.getUserLists(this.props.uid);
-      this.props.closeModal('Home');
-    } else {
-      this.props.openModal();
-    }
-  }*/
-
   renderLists() {
     if (this.props.loadingLists) {
       return <CardSection style={{ flex: 1 }}><Spinner /></CardSection>;
@@ -52,7 +41,6 @@ class HomeScreen extends React.Component {
     return (
       <CustomListsList
         onPress={() => NavigationService.navigate('AddCustomList')}
-        //onPress={() => this.toggleModal()}
       />
     );
   }
@@ -61,20 +49,25 @@ class HomeScreen extends React.Component {
     return (
       <Card style={{ flex: 1 }}>
         <CardSection>
-          <Text>Welcome, {this.props.username}!</Text>
-          <Text>Select a list of polishes below, or tap on the menu button for more options.</Text>
+          <View style={{ flex: 1, justifyContent: 'center' }}>
+          <Text style={styles.textStyle}>Welcome, {this.props.username}!</Text>
+          <Text style={styles.textStyle}>Select a list of polishes below, or tap
+           the menu button in the top right for more options. </Text>
+          </View>
         </CardSection>
 
         {this.renderLists()}
-
-        {/*<AddCustomList
-          visible={this.props.showModal}
-          closeModal={this.toggleModal.bind(this)}
-        />*/}
       </Card>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  textStyle: {
+    textAlign: 'center',
+    fontSize: 16,
+  }
+});
 
 const mapStateToProps = state => {
   const { username, uid } = state.auth;

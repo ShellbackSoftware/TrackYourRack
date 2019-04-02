@@ -1,8 +1,13 @@
 import React from 'react';
 import { Text, StyleSheet, Modal, View, Image, TouchableWithoutFeedback } from 'react-native';
+import NavigationService from '../../helpers/NavigationService';
 import { CardSection, Button } from '../../common';
 
 class SinglePolishFull extends React.Component {
+  addToList() {
+    NavigationService.navigate('AddPolishToList', this.props.polish);
+  }
+
   render() {
     const {
       titleStyle,
@@ -43,19 +48,20 @@ class SinglePolishFull extends React.Component {
         </CardSection>
 
         <CardSection>
-          <Text>{` Brand: ${polish.pBrand}
-          Collection: ${polish.pCollection}
-          Finish: ${polish.pFinish}
-          Number: ${polish.pNumber}
-          Release Season: ${polish.pSeason}
-          Release Year: ${polish.pYear}
-          Website: ${polish.pSite}
-          `}</Text>
+          <View style={{ flex: 1, justifyContent: 'center' }}>
+            <Text style={{ textAlign: 'center' }}>Brand: {polish.pBrand} </Text>
+            <Text style={{ textAlign: 'center' }}>Collection: {polish.pCollection} </Text>
+            <Text style={{ textAlign: 'center' }}>Finish: {polish.pFinish} </Text>
+            <Text style={{ textAlign: 'center' }}>Number: {polish.pNumber} </Text>
+            <Text style={{ textAlign: 'center' }}>Release Season: {polish.pSeason} </Text>
+            <Text style={{ textAlign: 'center' }}>Release Year: {polish.pYear} </Text>
+            <Text style={{ textAlign: 'center' }}>Website: {polish.pSite} </Text>
+          </View>
         </CardSection>
 
         <CardSection>
-          <Button> Add To List </Button>
-          <Button> Edit Polish </Button>
+          <Button onPress={this.addToList.bind(this)}> Add To List </Button>
+          {/*<Button> Edit Polish </Button>*/}
           <Button onPress={closeModal}> Close </Button>
         </CardSection>
       </View>

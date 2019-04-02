@@ -25,7 +25,8 @@ import {
   AboutScreen,
   RegisterScreen,
   PasswordScreen,
-  AddCustomListScreen
+  AddCustomListScreen,
+  AddPolishToListScreen
 } from './components/screens';
 
 const DrawerNav = createDrawerNavigator(
@@ -118,6 +119,11 @@ const RootStack = createStackNavigator(
     },
     AddCustomList: {
       screen: AddCustomListScreen,
+      mode: 'modal',
+      headerMode: 'none'
+    },
+    AddPolishToList: {
+      screen: AddPolishToListScreen,
       mode: 'modal',
       headerMode: 'none'
     },

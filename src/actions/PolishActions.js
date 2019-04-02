@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import NavigationService from '../components/helpers/NavigationService';
 import {
   SITE_BASE,
@@ -10,8 +11,16 @@ import {
   CLEAR_EDIT_MODE,
   FINISH_API_CALL,
   ADD_SEL_POLISH,
-  REM_SEL_POLISH
+  REM_SEL_POLISH,
+  CLEAR_SEARCH_TERM,
+  SET_BRANDS
 } from './constants';
+
+export const clearSearchTerm = () => {
+  return (dispatch) => {
+    dispatch({ type: CLEAR_SEARCH_TERM });
+  };
+};
 
 export const searchtermChanged = (text) => {
   return {
@@ -32,6 +41,11 @@ export const getAllPolishes = () => {
     })
     .then(res => res.json())
     .then(resData => {
+      // Set list of brands (used in autocomplete)
+      dispatch({
+        type: SET_BRANDS,
+        payload: _.uniq(_.map(resData, 'pBrand'))
+      });
       dispatch({
         type: ALL_POLISHES,
         payload: resData

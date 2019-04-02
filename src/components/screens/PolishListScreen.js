@@ -17,7 +17,8 @@ import {
   openModal,
   closeModal,
   removePolishFromList,
-  clearEditMode
+  clearEditMode,
+  clearSearchTerm
   } from '../../actions';
 import { Card, CardSection, Spinner, Button } from '../common';
 import PolishListItem from './polish/PolishListItem';
@@ -30,7 +31,8 @@ class PolishListScreen extends React.Component {
       tempPolishes: [],
       customList: false,
       listid: this.props.navigation.getParam('listID'),
-      listname: this.props.navigation.getParam('listname')
+      listname: this.props.navigation.getParam('listname'),
+      refresh: false
     };
     if (this.state.listid > 0) {
       this.props.getPolishList(this.state.listid);
@@ -40,6 +42,7 @@ class PolishListScreen extends React.Component {
    }
 
   componentDidMount() {
+    this.props.clearSearchTerm();
     if (this.state.listid > 0) {
       this.setState({ customList: true });
     } else {
@@ -79,6 +82,7 @@ class PolishListScreen extends React.Component {
     .then(() => {
       this.props.getPolishList(listid);
       this.props.clearEditMode();
+      this.setState({ refresh: !this.state.refresh });
     });
   }
 
@@ -247,5 +251,6 @@ export default connect(mapStateToProps, {
   openModal,
   closeModal,
   removePolishFromList,
-  clearEditMode
+  clearEditMode,
+  clearSearchTerm
 })(PolishListScreen);

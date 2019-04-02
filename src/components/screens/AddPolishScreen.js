@@ -1,6 +1,15 @@
 import React from 'react';
-import { Text, StyleSheet, Modal, View, TouchableWithoutFeedback, Image } from 'react-native';
+import {
+  Text,
+  StyleSheet,
+  Modal,
+  View,
+  TouchableWithoutFeedback,
+  Image,
+  TouchableOpacity
+  } from 'react-native';
 import { connect } from 'react-redux';
+import Autocomplete from 'react-native-autocomplete-input';
 import { ImagePicker } from 'expo';
 import { deleteList, addSinglePolish } from '../../actions';
 import { CardSection, Button, Input, Spinner } from '../common';
@@ -16,7 +25,8 @@ class AddPolishScreen extends React.Component {
       pSite: '',
       pSwatch: null,
       uid: this.props.uid,
-      filename: ''
+      filename: '',
+      pBrand: ''
     };
 
   ontextChange(field, value) {
@@ -45,6 +55,14 @@ class AddPolishScreen extends React.Component {
       const filename = fileuri.substring(fileuri.indexOf('ImagePicker') + 12);
       this.setState({ pSwatch: result.base64, filename, fileuri });
     }
+  }
+
+  renderItem(brand) {
+    return (
+      <TouchableOpacity onPress={() => this.setState({ pBrand: brand.trim() })}>
+        <Text>{brand}</Text>
+      </TouchableOpacity>
+    );
   }
 
   renderError() {
@@ -83,7 +101,10 @@ class AddPolishScreen extends React.Component {
       titleStyle,
       sectionStyle,
       uploadBtnStyle,
-      imageStyle
+      imageStyle,
+      autoStyle,
+      autoContainerStyle,
+      labelStyle
     } = styles;
     const { navigation } = this.props;
     return (
@@ -102,12 +123,25 @@ class AddPolishScreen extends React.Component {
         </CardSection>
 
         <CardSection style={sectionStyle}>
-          <Input
+        <View style={autoContainerStyle}>
+          <Text style={labelStyle}>Brand *</Text>
+          <Autocomplete
+            data={this.props.brands}
+            defaultValue={this.state.pBrand}
+            placeholder='China Glaze'
+            onChangeText={this.ontextChange.bind(this, 'pBrand')}
+            renderItem={(brand) => this.renderItem(brand)}
+            autoCorrect={false}
+            autoCapitalize='none'
+            containerStyle={autoStyle}
+          />
+        </View>
+         {/* <Input
             label='Brand *'
             placeholder='China Glaze'
             onChangeText={this.ontextChange.bind(this, 'pBrand')}
             value={this.state.pBrand}
-          />
+         />*/ }
         </CardSection>
 
         <CardSection style={sectionStyle}>
@@ -239,13 +273,30 @@ const styles = StyleSheet.create({
   imageStyle: {
     width: 75,
     height: 75
+  },
+  labelStyle: {
+    flex: 1
+  },
+  autoStyle: {
+    flex: 2,
+    left: 0,
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    zIndex: 1
+  },
+  autoContainerStyle: {
+    flex: 1,
+    paddingTop: 15,
+    paddingBottom: 15
   }
 });
 
 const mapStateToProps = state => {
   const { uid, token } = state.auth;
   const { loadingCreate, loadingImage, uploadError } = state.polish;
-  return { uid, token, loadingCreate, loadingImage, uploadError };
+  const { brands } = state.polishes;
+  return { uid, token, loadingCreate, loadingImage, uploadError, brands };
 };
 
 export default connect(mapStateToProps, {

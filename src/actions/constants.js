@@ -30,10 +30,12 @@ export const GET_LIST_CONTENT = 'get_list_content';
 export const GET_LISTS = 'get_lists';
 export const CLEAR_POLISH_STATE = 'clear_polish_state';
 export const SEARCH_TERM_CHANGED = 'search_term_changed';
+export const CLEAR_SEARCH_TERM = 'clear_search_term';
 export const SET_EDIT_MODE = 'set_edit_mode';
 export const CLEAR_EDIT_MODE = 'clear_edit_mode';
 export const ADD_SEL_POLISH = 'add_sel_polish';
 export const REM_SEL_POLISH = 'rem_sel_polish';
+export const SET_BRANDS = 'set_brands';
 
 // Polish upload stuff
 export const START_SINGLE_UPLOAD = 'start_single_upload';
