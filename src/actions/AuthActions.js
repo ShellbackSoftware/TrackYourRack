@@ -42,9 +42,17 @@ export const loginUser = ({ username, password }) => {
         pass: password,
       }),
     })
-    .then(res => res.json())
-    .then(resData => loginUserSuccess(dispatch, resData))
-    .catch(() => dispatch(loginUserFail(dispatch)));
+    .then(res => {
+      if (res.status !== 200) {
+        let errorMsg = res._bodyText.substring(res._bodyText.indexOf(':') + 2);
+        errorMsg = errorMsg.slice(0, -2);
+        console.log(errorMsg);
+        dispatch({ type: LOGIN_USER_FAIL, payload: errorMsg });
+      } else {
+        return res.json();
+      }
+    })
+    .then(resData => loginUserSuccess(dispatch, resData));
   };
 };
 
@@ -129,8 +137,7 @@ export const logoutUser = (lotoken) => {
     fetch(`${SITE_BASE}/user/logout?_format=json&token=${lotoken}`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'//,
-        //'X-CSRF-Token': token
+        'Content-Type': 'application/json'
       },
     })
     .then(res => res.json())
@@ -157,8 +164,4 @@ const loginUserSuccess = (dispatch, user) => {
     const uidPromise = SecureStore.setItemAsync('uid', user.current_user.uid);
     Promise.all([lotokenPromise, tokenPromise, namePromise, uidPromise])
     .then(() => NavigationService.navigate('Auth'));
-};
-
-const loginUserFail = (dispatch) => {
-    dispatch({ type: LOGIN_USER_FAIL });
 };

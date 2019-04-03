@@ -1,14 +1,15 @@
 import React from 'react';
 import { Text, View, TouchableWithoutFeedback, Modal, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
-import { CardSection, Spinner } from '../common';
+import { getUserLists } from '../../actions';
+import { Card, CardSection, Spinner } from '../common';
 import CustomListsList from '../CustomListsList';
 
 class AddPolishToListScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = { polish: this.props.navigation.state.params };
-    console.log(this.props.navigation.state.params);
+    this.props.getUserLists(this.props.uid);
   }
 
   onButtonPress() {
@@ -39,13 +40,13 @@ class AddPolishToListScreen extends React.Component {
       <TouchableWithoutFeedback onPress={() => this.props.navigation.pop()}>
       <View style={containerStyle}>
       <TouchableWithoutFeedback>
-      <View>
+      <Card>
         <CardSection>
           <Text>Which list would you like to add {polish.pName} to?</Text>
         </CardSection>
 
         {this.renderLists()}
-      </View>
+      </Card>
       </TouchableWithoutFeedback>
       </View>
       </TouchableWithoutFeedback>
@@ -73,8 +74,9 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
+  const { uid } = state.auth;
   const { loadingLists } = state.lists;
-  return { loadingLists };
+  return { uid, loadingLists };
 };
 
-export default connect(mapStateToProps, { })(AddPolishToListScreen);
+export default connect(mapStateToProps, { getUserLists })(AddPolishToListScreen);
