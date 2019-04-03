@@ -9,8 +9,6 @@ class RegisterScreen extends React.Component {
   state = {
     mail: '',
     name: '',
-    pass: '',
-    vPass: '',
     errorMsg: '',
     message: ''
   };
@@ -22,8 +20,9 @@ class RegisterScreen extends React.Component {
   onButtonPress() {
     this.setState({ errorMsg: '' });
     if (this.verifyInput()) {
-      const { name, mail, pass } = this.props;
-      this.props.registerUser({ name, mail, pass });
+      const { name, mail } = this.props;
+      this.props.registerUser({ name, mail });
+      this.setState({ message: `Thank you for registering at Shellback Software! Please check your email (${mail}) for further instructions.` });
     }
   }
 
@@ -38,11 +37,6 @@ class RegisterScreen extends React.Component {
       this.setState({ errorMsg: 'Please enter a username.' });
       return false;
     }
-    if (this.state.pass !== this.state.vPass || this.state.pass === '' || !this.state.vPass) {
-      this.setState({ errorMsg: 'Passwords don\'t match.' });
-      return false;
-    }
-
     return true;
   }
 
@@ -110,24 +104,6 @@ class RegisterScreen extends React.Component {
             label="Username"
             onChangeText={this.ontextChange.bind(this, 'name')}
             value={this.state.name}
-          />
-        </CardSection>
-
-        <CardSection>
-          <Input
-              secureTextEntry
-              label="Password"
-              onChangeText={this.ontextChange.bind(this, 'pass')}
-              value={this.state.pass}
-          />
-        </CardSection>
-
-        <CardSection>
-          <Input
-              secureTextEntry
-              label="Verify Password"
-              onChangeText={this.ontextChange.bind(this, 'vPass')}
-              value={this.state.vPass}
           />
         </CardSection>
 

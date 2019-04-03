@@ -60,7 +60,7 @@ export const resetPassword = ({ mail }) => {
   console.log(mail);
 };
 
-export const registerUser = ({ mail, name, pass }) => {
+export const registerUser = ({ mail, name }) => {
   return (dispatch) => {
     dispatch({ type: LOGIN_USER });
 
@@ -72,7 +72,6 @@ export const registerUser = ({ mail, name, pass }) => {
       body: JSON.stringify({
         name: { value: name },
         mail: { value: mail },
-        pass: { value: pass },
       }),
     })
     .then(res => { console.log(res); return res.json(); })
