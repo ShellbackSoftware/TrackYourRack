@@ -7,7 +7,8 @@ import {
   AUTHENTICATE_USER,
   LOGOUT_USER,
   SET_TOKEN,
-  REGISTER_USER
+  REGISTER_USER,
+  REGISTER_USER_FAIL
  } from '../actions/constants';
 
 const INITIAL_STATE = {
@@ -16,7 +17,8 @@ const INITIAL_STATE = {
  loading: false,
  error: '',
  uid: '',
- token: ''
+ token: '',
+ message: ''
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -61,7 +63,9 @@ export default (state = INITIAL_STATE, action) => {
       case LOGOUT_USER:
         return INITIAL_STATE;
       case REGISTER_USER:
-        return { ...state, loading: false };
+        return { ...state, loading: false, message: info };
+      case REGISTER_USER_FAIL:
+        return { ...state, error: info, loading: false };
      default:
          return state;
  }

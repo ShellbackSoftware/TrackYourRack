@@ -20,9 +20,9 @@ class RegisterScreen extends React.Component {
   onButtonPress() {
     this.setState({ errorMsg: '' });
     if (this.verifyInput()) {
-      const { name, mail } = this.props;
+      const { name, mail } = this.state;
       this.props.registerUser({ name, mail });
-      this.setState({ message: `Thank you for registering at Shellback Software! Please check your email (${mail}) for further instructions.` });
+      //this.setState({ message: `Thank you for registering at Shellback Software! Please check your email (${mail}) for further instructions.` });
     }
   }
 
@@ -61,11 +61,11 @@ class RegisterScreen extends React.Component {
         );
       }
 
-      if (this.state.message) {
+      if (this.props.message) {
         return (
-          <View style={{ backgroundColor: 'white' }}>
-              <Text style={styles.errorTextStyle}>
-                {this.state.message}
+          <View style={{ justifyContent: 'center' }}>
+              <Text style={styles.msgTextStyle}>
+                {this.props.message}
               </Text>
           </View>
         );
@@ -74,8 +74,11 @@ class RegisterScreen extends React.Component {
 
   renderButton() {
       if (this.props.loading) {
-          return <Spinner size="large" />;
+        return <Spinner size="large" />;
       }
+
+      // Don't need the button if registration was submitted
+      if (this.props.message) { return <View style={{ flex: 1, justifyContent: 'center' }} />; }
 
       return (
         <Button onPress={this.onButtonPress.bind(this)}>
@@ -122,12 +125,17 @@ const styles = StyleSheet.create({
       fontSize: 20,
       alignSelf: 'center',
       color: 'red'
+  },
+  msgTextStyle: {
+    fontSize: 18,
+    textAlign: 'center',
+    color: '#105915'
   }
 });
 
 const mapStateToProps = state => {
-  const { username, password, error, loading } = state.auth;
-  return { username, password, error, loading };
+  const { username, password, error, loading, message } = state.auth;
+  return { username, password, error, loading, message };
 };
 
 export default connect(mapStateToProps, {

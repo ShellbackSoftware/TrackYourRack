@@ -12,6 +12,7 @@ export const AUTHENTICATE_USER = 'authenticate_user';
 export const LOGOUT_USER = 'logout_user';
 export const SET_TOKEN = 'set_token';
 export const REGISTER_USER = 'register_user';
+export const REGISTER_USER_FAIL = 'register_user_fail';
 
 // Home page
 export const SELECT_LIST = 'select_list';

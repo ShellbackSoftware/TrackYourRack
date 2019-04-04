@@ -11,7 +11,8 @@ import {
     AUTHENTICATE_USER,
     LOGOUT_USER,
     SET_TOKEN,
-    REGISTER_USER
+    REGISTER_USER,
+    REGISTER_USER_FAIL
 } from './constants';
 
 export const usernameChanged = (text) => {
@@ -46,7 +47,6 @@ export const loginUser = ({ username, password }) => {
       if (res.status !== 200) {
         let errorMsg = res._bodyText.substring(res._bodyText.indexOf(':') + 2);
         errorMsg = errorMsg.slice(0, -2);
-        console.log(errorMsg);
         dispatch({ type: LOGIN_USER_FAIL, payload: errorMsg });
       } else {
         return res.json();
@@ -60,7 +60,8 @@ export const resetPassword = ({ mail }) => {
   console.log(mail);
 };
 
-export const registerUser = ({ mail, name }) => {
+export const registerUser = ({ name, mail }) => {
+  console.log(`Mail: ${mail}, Name:${name}`);
   return (dispatch) => {
     dispatch({ type: LOGIN_USER });
 
@@ -71,12 +72,33 @@ export const registerUser = ({ mail, name }) => {
       },
       body: JSON.stringify({
         name: { value: name },
-        mail: { value: mail },
+        mail: { value: mail }
       }),
     })
-    .then(res => { console.log(res); return res.json(); })
-    .then(resData => console.log(resData))//registerSuccess(dispatch, resData))
-    .catch(() => dispatch(registerFail(dispatch)));
+    .then(res => {
+      if (res.status !== 200) {
+        console.log(res);
+        let errorMsg = res._bodyText;
+        // Username taken, email not
+        if ((errorMsg.indexOf('name:') !== -1) && (errorMsg.indexOf('mail:' === -1))) {
+          errorMsg = errorMsg.substring(errorMsg.indexOf('nname:') + 6);
+          errorMsg = errorMsg.slice(0, -4);
+        } else if ((errorMsg.indexOf('mail:') !== -1) && (errorMsg.indexOf('name:' === -1))) {
+        // Email taken, username not
+          errorMsg = errorMsg.substring(errorMsg.indexOf('nmail:') + 7);
+          errorMsg = errorMsg.slice(0, -4);
+        } else {
+        // Email and username taken
+          errorMsg = 'Username and email are both already in use.';
+        }
+        dispatch(registerFail(dispatch, errorMsg));
+      } else {
+        return res.json();
+      }
+    })
+    .then(() => dispatch({ type: REGISTER_USER,
+      payload: `Thank you for registering at Shellback Software!
+      Please check your email (${mail}) for further instructions.` }));
   };
 };
 // eslint-disable-next-line
@@ -97,8 +119,8 @@ const registerSuccess = (user) => {
   };
 };
 
-const registerFail = (dispatch) => {
-  dispatch({ type: LOGIN_USER_FAIL });
+const registerFail = (dispatch, error) => {
+  dispatch({ type: REGISTER_USER_FAIL, payload: error });
 };
 
 export const setUserToken = () => {
