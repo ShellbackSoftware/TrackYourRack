@@ -2,7 +2,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
-//import { usernameChanged, passwordChanged, loginUser } from '../../actions';
+import { resetPassword } from '../../actions';
 import { Button, Card, CardSection, Input, Spinner } from '../common';
 
 class PasswordScreen extends React.Component {
@@ -17,7 +17,7 @@ class PasswordScreen extends React.Component {
 
   onButtonPress() {
     this.setState({ errorMsg: '' });
-    if (this.verifyMail()) {
+    if (this.verifyEmail()) {
       this.props.resetPassword(this.state.mail);
     } else {
       this.setState({ errorMsg: 'Please enter a valid email!' });
@@ -65,6 +65,8 @@ class PasswordScreen extends React.Component {
           return <Spinner size="large" />;
       }
 
+      if (this.props.message) { return <View style={{ flex: 1, justifyContent: 'center' }} />; }
+
       return (
         <Button onPress={this.onButtonPress.bind(this)}>
           Reset Password
@@ -104,8 +106,9 @@ const styles = StyleSheet.create({
       color: 'red'
   },
   msgTextStyle: {
-    fontSize: 20,
-    alignSelf: 'center'
+    fontSize: 18,
+    textAlign: 'center',
+    color: '#105915'
   }
 });
 
@@ -114,4 +117,4 @@ const mapStateToProps = state => {
   return { username, password, error, loading, message };
 };
 
-export default connect(mapStateToProps, { })(PasswordScreen);
+export default connect(mapStateToProps, { resetPassword })(PasswordScreen);

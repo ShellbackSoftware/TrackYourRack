@@ -13,6 +13,9 @@ export const LOGOUT_USER = 'logout_user';
 export const SET_TOKEN = 'set_token';
 export const REGISTER_USER = 'register_user';
 export const REGISTER_USER_FAIL = 'register_user_fail';
+export const CLEAR_MESSAGE = 'clear_message';
+export const PASS_RESET_SUCCESS = 'pass_reset_success';
+export const PASS_RESET_FAIL = 'pass_reset_fail';
 
 // Home page
 export const SELECT_LIST = 'select_list';

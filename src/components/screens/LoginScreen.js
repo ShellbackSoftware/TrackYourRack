@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import NavigationService from '../helpers/NavigationService';
-import { usernameChanged, passwordChanged, loginUser } from '../../actions';
+import { usernameChanged, passwordChanged, loginUser, clearAuthMessage } from '../../actions';
 import { Button, Card, CardSection, Input, Spinner, A } from '../common';
 
 class LoginScreen extends React.Component {
@@ -18,6 +18,10 @@ class LoginScreen extends React.Component {
       const { username, password } = this.props;
       this.props.loginUser({ username, password });
   }
+
+  willFocus = this.props.navigation.addListener('willFocus', () => {
+    this.props.clearAuthMessage();
+  });
 
   renderError() {
     if (this.props.error) {
@@ -114,5 +118,6 @@ const mapStateToProps = state => {
 export default connect(mapStateToProps, {
   usernameChanged,
   passwordChanged,
-  loginUser
+  loginUser,
+  clearAuthMessage
 })(LoginScreen);

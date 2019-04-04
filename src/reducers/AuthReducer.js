@@ -8,7 +8,10 @@ import {
   LOGOUT_USER,
   SET_TOKEN,
   REGISTER_USER,
-  REGISTER_USER_FAIL
+  REGISTER_USER_FAIL,
+  CLEAR_MESSAGE,
+  PASS_RESET_SUCCESS,
+  PASS_RESET_FAIL
  } from '../actions/constants';
 
 const INITIAL_STATE = {
@@ -66,6 +69,12 @@ export default (state = INITIAL_STATE, action) => {
         return { ...state, loading: false, message: info };
       case REGISTER_USER_FAIL:
         return { ...state, error: info, loading: false };
+      case CLEAR_MESSAGE:
+        return { ...state, message: '' };
+      case PASS_RESET_SUCCESS:
+        return { ...state, loading: false, message: info };
+      case PASS_RESET_FAIL:
+        return { ...state, loading: false, error: info };
      default:
          return state;
  }

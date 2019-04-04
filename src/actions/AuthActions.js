@@ -12,8 +12,17 @@ import {
     LOGOUT_USER,
     SET_TOKEN,
     REGISTER_USER,
-    REGISTER_USER_FAIL
+    REGISTER_USER_FAIL,
+    CLEAR_MESSAGE,
+    PASS_RESET_SUCCESS,
+    PASS_RESET_FAIL
 } from './constants';
+
+export const clearAuthMessage = () => {
+  return {
+    type: CLEAR_MESSAGE
+  };
+};
 
 export const usernameChanged = (text) => {
     return {
@@ -56,12 +65,41 @@ export const loginUser = ({ username, password }) => {
   };
 };
 
-export const resetPassword = ({ mail }) => {
-  console.log(mail);
+export const resetPassword = (mail) => {
+  return (dispatch) => {
+    dispatch({ type: LOGIN_USER });
+
+    fetch(`${SITE_BASE}/user/password?_format=json`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        mail
+      }),
+    })
+    .then(res => {
+      console.log(res);
+      if (res.status === 200) {
+        dispatch({
+          type: PASS_RESET_SUCCESS,
+          payload: 'Password reset instructions have been sent to your email.'
+        });
+      } else {
+        let errorMsg = res._bodyText;
+        if (errorMsg.indexOf('blocked') === -1) {
+          errorMsg = 'Email not found.';
+        } else {
+          errorMsg = `This account has not been activated yet.
+           Please follow the instructions in your welcome email.`;
+        }
+        dispatch({ type: PASS_RESET_FAIL, payload: errorMsg });
+      }
+    });
+  };
 };
 
 export const registerUser = ({ name, mail }) => {
-  console.log(`Mail: ${mail}, Name:${name}`);
   return (dispatch) => {
     dispatch({ type: LOGIN_USER });
 
