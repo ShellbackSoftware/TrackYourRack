@@ -27,13 +27,13 @@ class A extends React.Component {
     if (this.props.url) {
       return (
         <Text style={styles.title} onPress={this.goToURL}>
-        > {title}
+         {title}
         </Text>
       );
     }
     return (
       <Text style={styles.title} onPress={this.props.onPress}>
-      > {title}
+       {title}
       </Text>
     );
   }

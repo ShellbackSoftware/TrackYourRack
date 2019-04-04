@@ -31,8 +31,7 @@ class PolishListScreen extends React.Component {
       tempPolishes: [],
       customList: false,
       listid: this.props.navigation.getParam('listID'),
-      listname: this.props.navigation.getParam('listname'),
-      refresh: false
+      listname: this.props.navigation.getParam('listname')
     };
     if (this.state.listid > 0) {
       this.props.getPolishList(this.state.listid);
@@ -82,7 +81,6 @@ class PolishListScreen extends React.Component {
     .then(() => {
       this.props.getPolishList(listid);
       this.props.clearEditMode();
-      this.setState({ refresh: !this.state.refresh });
     });
   }
 
