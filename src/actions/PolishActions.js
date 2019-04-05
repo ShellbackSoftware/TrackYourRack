@@ -13,8 +13,15 @@ import {
   ADD_SEL_POLISH,
   REM_SEL_POLISH,
   CLEAR_SEARCH_TERM,
-  SET_BRANDS
+  SET_BRANDS,
+  SET_LIST_NAME
 } from './constants';
+
+export const setListName = (listname) => {
+  return (dispatch) => {
+    dispatch({ type: SET_LIST_NAME, payload: listname });
+  };
+};
 
 export const clearSearchTerm = () => {
   return (dispatch) => {
@@ -29,6 +36,7 @@ export const searchtermChanged = (text) => {
   };
 };
 
+// Returns polish objects
 export const getAllPolishes = () => {
   return (dispatch) => {
     dispatch({ type: START_API_CALL });
@@ -54,6 +62,7 @@ export const getAllPolishes = () => {
   };
 };
 
+// Returns list of pID's in the list
 export const getPolishList = (listid) => {
   return (dispatch) => {
     dispatch({ type: START_API_CALL });
@@ -139,7 +148,7 @@ export const addPolishToList = (uid, listid, pID, route) => {
   };
 };
 
-export const removePolishFromList = (uid, listid, pID, route) => {
+export const removePolishFromList = (uid, listid, pID) => {
   return (dispatch) => {
     dispatch({ type: START_API_CALL });
 
@@ -154,9 +163,8 @@ export const removePolishFromList = (uid, listid, pID, route) => {
       })
     })
     .then(() => {
-      dispatch({ type: FINISH_API_CALL });
       dispatch({ type: CLEAR_POLISH_STATE });
-      NavigationService.navigate(route);
+      dispatch({ type: FINISH_API_CALL });
     });
   };
 };

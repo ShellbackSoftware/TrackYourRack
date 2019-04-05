@@ -40,6 +40,7 @@ export const CLEAR_EDIT_MODE = 'clear_edit_mode';
 export const ADD_SEL_POLISH = 'add_sel_polish';
 export const REM_SEL_POLISH = 'rem_sel_polish';
 export const SET_BRANDS = 'set_brands';
+export const SET_LIST_NAME = 'set_list_name';
 
 // Polish upload stuff
 export const START_SINGLE_UPLOAD = 'start_single_upload';

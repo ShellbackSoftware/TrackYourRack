@@ -37,7 +37,10 @@ class PolishListItem extends React.PureComponent {
   }
 
   onLongPress() {
-    this.toggleEditMode();
+    console.log(this.props.curListName);
+    if (this.props.curListName > 0) {
+      this.toggleEditMode();
+    }
   }
 
   setStyle() {
@@ -125,8 +128,8 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  const { editMode, selectedPolishes } = state.polishes;
-  return { editMode, selectedPolishes };
+  const { editMode, selectedPolishes, curListName } = state.polishes;
+  return { editMode, selectedPolishes, curListName };
 };
 
 export default connect(mapStateToProps, {

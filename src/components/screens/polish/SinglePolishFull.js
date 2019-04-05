@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, StyleSheet, Modal, View, Image, TouchableWithoutFeedback } from 'react-native';
 import NavigationService from '../../helpers/NavigationService';
-import { CardSection, Button } from '../../common';
+import { CardSection, Button, A } from '../../common';
 
 class SinglePolishFull extends React.Component {
   addToList() {
@@ -55,7 +55,9 @@ class SinglePolishFull extends React.Component {
             <Text style={{ textAlign: 'center' }}>Number: {polish.pNumber} </Text>
             <Text style={{ textAlign: 'center' }}>Release Season: {polish.pSeason} </Text>
             <Text style={{ textAlign: 'center' }}>Release Year: {polish.pYear} </Text>
-            <Text style={{ textAlign: 'center' }}>Website: {polish.pSite} </Text>
+            <Text style={{ textAlign: 'center' }}>
+              Website: <A url={polish.pSite} title={polish.pSite} />
+              </Text>
           </View>
         </CardSection>
 

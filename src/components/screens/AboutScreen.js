@@ -35,6 +35,8 @@ class AboutScreen extends React.Component {
           <Text>Through all of the lists, you'll see a search box. This search box searches the name of the polish as
             well as the brand, and it's a live search, so the results change depending on what the query is. {'\n'}</Text>
 
+          <Text>Finally, if you tap on a polish in any list, you'll see more information about it. On this screen, you can add this single polish to one of your lists, or remove it from the current list. {'\n'}</Text>
+
           <Text style={headerStyle}>Adding a Polish</Text>
           <Text>In order to add a new polish to the database, you need to go to the 'All Polishes' list. From there, tap
              on the button in the top right corner. Here, you can manually fill in all of the information for the polish.

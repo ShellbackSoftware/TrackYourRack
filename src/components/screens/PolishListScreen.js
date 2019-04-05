@@ -9,16 +9,16 @@ import {
   } from 'react-native';
 import { Icon, SearchBar } from 'react-native-elements';
 import { connect } from 'react-redux';
+import NavigationService from '../helpers/NavigationService';
 import {
   getPolishList,
   clearPolishState,
   finishPolishList,
   searchtermChanged,
-  openModal,
-  closeModal,
   removePolishFromList,
   clearEditMode,
-  clearSearchTerm
+  clearSearchTerm,
+  setListName
   } from '../../actions';
 import { Card, CardSection, Spinner, Button } from '../common';
 import PolishListItem from './polish/PolishListItem';
@@ -31,8 +31,10 @@ class PolishListScreen extends React.Component {
       tempPolishes: [],
       customList: false,
       listid: this.props.navigation.getParam('listID'),
-      listname: this.props.navigation.getParam('listname')
+      listname: this.props.navigation.getParam('listname'),
+      loading: false
     };
+    this.props.setListName(this.state.listname);
     if (this.state.listid > 0) {
       this.props.getPolishList(this.state.listid);
     } else {
@@ -71,23 +73,27 @@ class PolishListScreen extends React.Component {
   }
 
   onRemovePress() {
+    this.setState({ loading: true });
     const uid = this.props.uid;
     const listid = this.state.listid;
+    const listname = this.state.listname;
     // eslint-disable-next-line
     const removedPromise = this.props.selectedPolishes.map((p) => {
-      this.props.removePolishFromList(uid, listid, p, this.state.listname);
+      this.props.removePolishFromList(uid, listid, p);
     });
-    Promise.all([removedPromise])
+    const listPromise = this.props.getPolishList(listid);
+    Promise.all([removedPromise, listPromise])
     .then(() => {
-      this.props.getPolishList(listid);
+      this.getListContent();
       this.props.clearEditMode();
+      NavigationService.navigate('PolishList', { listname, listid });
     });
   }
 
   getListContent() {
     const { allPolishes, curPolishes } = this.props;
     const polishes = _.intersectionBy(allPolishes, curPolishes, 'pID');
-    this.setState({ polishes, tempPolishes: polishes });
+    this.setState({ polishes, tempPolishes: polishes, loading: false });
   }
 
   willFocus = this.props.navigation.addListener('willFocus', () => {
@@ -95,18 +101,10 @@ class PolishListScreen extends React.Component {
     this.props.clearPolishState();
       if (this.state.listid > 0) {
         const listPromise = this.props.getPolishList(this.state.listid);
-        Promise.all([listPromise]).then(this.getListContent());
+        Promise.all([listPromise]).then(() => this.getListContent());
       }
     }
   );
-
-  toggleModal() {
-    if (this.props.showModal) {
-      this.props.closeModal();
-    } else {
-      this.props.openModal();
-    }
-  }
 
   scrollToTop() {
     this.flatListRef.scrollToIndex({ animated: true, index: 0 });
@@ -161,7 +159,7 @@ class PolishListScreen extends React.Component {
   }
 
   render() {
-    if (this.props.loadingPolish) {
+    if (this.props.loadingPolish || this.state.loading) {
       return (
         <View>
           <CardSection>
@@ -246,9 +244,8 @@ export default connect(mapStateToProps, {
   clearPolishState,
   finishPolishList,
   searchtermChanged,
-  openModal,
-  closeModal,
   removePolishFromList,
   clearEditMode,
-  clearSearchTerm
+  clearSearchTerm,
+  setListName
 })(PolishListScreen);

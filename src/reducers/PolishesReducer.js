@@ -10,7 +10,8 @@ import {
   ADD_SEL_POLISH,
   REM_SEL_POLISH,
   CLEAR_SEARCH_TERM,
-  SET_BRANDS
+  SET_BRANDS,
+  SET_LIST_NAME
  } from '../actions/constants';
 
 const INITIAL_STATE = {
@@ -20,7 +21,8 @@ const INITIAL_STATE = {
   searchTerm: '',
   editMode: false,
   selectedPolishes: [],
-  brands: []
+  brands: [],
+  curListName: ''
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -36,6 +38,8 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, allPolishes: info, loadingPolish: false };
     case SET_BRANDS:
       return { ...state, brands: info };
+    case SET_LIST_NAME:
+      return { ...state, curListName: info };
     case CLEAR_POLISH_STATE:
       return { ...state, curPolishes: [], selectedPolishes: [] };
     case SEARCH_TERM_CHANGED:
