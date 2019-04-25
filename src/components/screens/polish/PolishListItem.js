@@ -37,8 +37,7 @@ class PolishListItem extends React.PureComponent {
   }
 
   onLongPress() {
-    console.log(this.props.curListName);
-    if (this.props.curListName > 0) {
+    if (this.props.curListName !== 'All Polishes') {
       this.toggleEditMode();
     }
   }

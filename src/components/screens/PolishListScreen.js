@@ -9,7 +9,7 @@ import {
   } from 'react-native';
 import { Icon, SearchBar } from 'react-native-elements';
 import { connect } from 'react-redux';
-import NavigationService from '../helpers/NavigationService';
+//import NavigationService from '../helpers/NavigationService';
 import {
   getPolishList,
   clearPolishState,
@@ -32,11 +32,12 @@ class PolishListScreen extends React.Component {
       customList: false,
       listid: this.props.navigation.getParam('listID'),
       listname: this.props.navigation.getParam('listname'),
-      loading: false
+      loading: false,
+      refresh: false
     };
     this.props.setListName(this.state.listname);
     if (this.state.listid > 0) {
-      this.props.getPolishList(this.state.listid);
+      this.props.getPolishList(this.state.listid).then(() => this.getListContent());
     } else {
       this.state = { polishes: this.props.allPolishes, tempPolishes: this.props.allPolishes };
     }
@@ -76,35 +77,41 @@ class PolishListScreen extends React.Component {
     this.setState({ loading: true });
     const uid = this.props.uid;
     const listid = this.state.listid;
-    const listname = this.state.listname;
+    console.log(`Num cur polishes before update: ${this.props.curPolishes.length}`);
+    //const listname = this.state.listname;
     // eslint-disable-next-line
-    const removedPromise = this.props.selectedPolishes.map((p) => {
+    this.props.selectedPolishes.map((p) => {
       this.props.removePolishFromList(uid, listid, p);
     });
-    const listPromise = this.props.getPolishList(listid);
-    Promise.all([removedPromise, listPromise])
-    .then(() => {
-      this.getListContent();
-      this.props.clearEditMode();
-      NavigationService.navigate('PolishList', { listname, listid });
+    this.props.getPolishList(this.state.listid).then(() => {
+      this.getListContent().then(() => {
+        this.props.clearEditMode();
+        this.setState({ loading: false });
+      });
     });
   }
 
   getListContent() {
     const { allPolishes, curPolishes } = this.props;
     const polishes = _.intersectionBy(allPolishes, curPolishes, 'pID');
-    this.setState({ polishes, tempPolishes: polishes, loading: false });
+    console.log(`Num cur polishes after intersection: ${polishes.length}`);
+    this.setState({
+      polishes,
+      tempPolishes: polishes,
+      refresh: !this.state.refresh
+    });
+    return Promise.resolve();
   }
 
   willFocus = this.props.navigation.addListener('willFocus', () => {
     this.props.clearEditMode();
     this.props.clearPolishState();
-      if (this.state.listid > 0) {
-        const listPromise = this.props.getPolishList(this.state.listid);
-        Promise.all([listPromise]).then(() => this.getListContent());
+      if (this.state.listname !== 'All Polishes') {
+        this.getListContent();
+       // const listPromise = this.props.getPolishList(this.state.listid);
+       // Promise.all([listPromise]).then(() => this.getListContent());
       }
-    }
-  );
+    });
 
   scrollToTop() {
     this.flatListRef.scrollToIndex({ animated: true, index: 0 });
@@ -187,7 +194,7 @@ class PolishListScreen extends React.Component {
               keyExtractor={polish => polish.pID}
               initialNumToRender={50}
               removeClippedSubviews
-              extraData={this.state}
+              extraData={this.state.refresh}
             />
 
         {this.renderScrollButton()}

@@ -67,7 +67,7 @@ export const getPolishList = (listid) => {
   return (dispatch) => {
     dispatch({ type: START_API_CALL });
 
-    fetch(`${SITE_BASE}/api/lists/content/${listid}?_format=json`, {
+    return fetch(`${SITE_BASE}/api/lists/content/${listid}?_format=json`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -79,6 +79,7 @@ export const getPolishList = (listid) => {
         type: GET_LIST_CONTENT,
         payload: resData
       });
+      return Promise.resolve();
     });
   };
 };
