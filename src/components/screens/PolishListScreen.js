@@ -103,11 +103,11 @@ class PolishListScreen extends React.Component {
   willFocus = this.props.navigation.addListener('willFocus', () => {
     this.props.clearEditMode();
     this.props.clearPolishState();
-      if (this.state.listname !== 'All Polishes') {
-        this.props.getPolishList(this.state.listid)
-          .then(() => this.getListContent())
-            .then(() => this.setState({ loading: false, refresh: !this.state.refresh }));
-      }
+    if (this.state.listid > 0) {
+      this.props.getPolishList(this.state.listid)
+        .then(() => this.getListContent())
+          .then(() => this.setState({ loading: false, refresh: !this.state.refresh }));
+    }
   });
 
   scrollToTop() {
