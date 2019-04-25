@@ -52,7 +52,6 @@ export const addSinglePolish = (polish, token, route) => {
       }
     })
     .then(pID => {
-      console.log(`Polish created: ${pID}`);
       dispatch({ type: FINISH_SINGLE_UPLOAD });
       NavigationService.navigate(route);
     });

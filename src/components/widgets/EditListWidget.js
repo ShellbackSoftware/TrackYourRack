@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Text, View, StyleSheet, FlatList } from 'react-native';
 import { SearchBar } from 'react-native-elements';
+import NavigationService from '../helpers/NavigationService';
 import { Button, CardSection, Spinner } from '../common';
 import {
     getPolishList,
@@ -57,10 +58,10 @@ class EditListWidget extends React.Component {
   saveChanges() {
     const uid = this.props.uid;
     const listid = this.state.listid;
-    // eslint-disable-next-line
-    this.props.selectedPolishes.map((p) => {
-      this.props.addPolishToList(uid, listid, p, 'PolishList');
+    const adds = this.props.selectedPolishes.map((p) => {
+      return this.props.addPolishToList(uid, listid, p);
     });
+    Promise.all(adds).then(() => NavigationService.navigate('PolishList'));
   }
 
   renderHeader() {

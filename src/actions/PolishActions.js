@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import NavigationService from '../components/helpers/NavigationService';
 import {
   SITE_BASE,
   ALL_POLISHES,
@@ -127,11 +126,11 @@ export const remSelPolish = (pID) => {
    };
  };
 
-export const addPolishToList = (uid, listid, pID, route) => {
+export const addPolishToList = (uid, listid, pID) => {
   return (dispatch) => {
     dispatch({ type: START_API_CALL });
 
-    fetch(`${SITE_BASE}/api/lists/content/${listid}?_format=json`, {
+    return fetch(`${SITE_BASE}/api/lists/content/${listid}?_format=json`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -144,7 +143,6 @@ export const addPolishToList = (uid, listid, pID, route) => {
     .then(() => {
       dispatch({ type: FINISH_API_CALL });
       dispatch({ type: CLEAR_EDIT_MODE });
-      NavigationService.navigate(route);
     });
   };
 };
@@ -153,7 +151,7 @@ export const removePolishFromList = (uid, listid, pID) => {
   return (dispatch) => {
     dispatch({ type: START_API_CALL });
 
-    fetch(`${SITE_BASE}/api/lists/content/${listid}?_format=json`, {
+    return fetch(`${SITE_BASE}/api/lists/content/${listid}?_format=json`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

@@ -79,7 +79,6 @@ export const resetPassword = (mail) => {
       }),
     })
     .then(res => {
-      console.log(res);
       if (res.status === 200) {
         dispatch({
           type: PASS_RESET_SUCCESS,
@@ -115,7 +114,6 @@ export const registerUser = ({ name, mail }) => {
     })
     .then(res => {
       if (res.status !== 200) {
-        console.log(res);
         let errorMsg = res._bodyText;
         // Username taken, email not
         if ((errorMsg.indexOf('name:') !== -1) && (errorMsg.indexOf('mail:' === -1))) {
@@ -141,7 +139,6 @@ export const registerUser = ({ name, mail }) => {
 };
 // eslint-disable-next-line
 const registerSuccess = (user) => {
-  console.log(user);
   return (dispatch) => {
     dispatch({
       type: REGISTER_USER,

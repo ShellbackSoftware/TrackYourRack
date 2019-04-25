@@ -9,7 +9,6 @@ import {
   } from 'react-native';
 import { Icon, SearchBar } from 'react-native-elements';
 import { connect } from 'react-redux';
-//import NavigationService from '../helpers/NavigationService';
 import {
   getPolishList,
   clearPolishState,
@@ -27,13 +26,13 @@ class PolishListScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      polishes: [],
-      tempPolishes: [],
+      polishes: [],       // Default list of polishes
+      tempPolishes: [],   // Used when searching
       customList: false,
       listid: this.props.navigation.getParam('listID'),
       listname: this.props.navigation.getParam('listname'),
       loading: false,
-      refresh: false
+      refresh: false      // Used to refresh the list
     };
     this.props.setListName(this.state.listname);
     if (this.state.listid > 0) {
@@ -77,16 +76,15 @@ class PolishListScreen extends React.Component {
     this.setState({ loading: true });
     const uid = this.props.uid;
     const listid = this.state.listid;
-    console.log(`Num cur polishes before update: ${this.props.curPolishes.length}`);
-    //const listname = this.state.listname;
-    // eslint-disable-next-line
-    this.props.selectedPolishes.map((p) => {
-      this.props.removePolishFromList(uid, listid, p);
+    const rems = this.props.selectedPolishes.map((p) => {
+      return this.props.removePolishFromList(uid, listid, p);
     });
-    this.props.getPolishList(this.state.listid).then(() => {
-      this.getListContent().then(() => {
-        this.props.clearEditMode();
-        this.setState({ loading: false });
+    Promise.all(rems).then(() => {
+      this.props.getPolishList(this.state.listid).then(() => {
+        this.getListContent().then(() => {
+          this.props.clearEditMode();
+          this.setState({ loading: false, refresh: !this.state.refresh });
+        });
       });
     });
   }
@@ -94,24 +92,23 @@ class PolishListScreen extends React.Component {
   getListContent() {
     const { allPolishes, curPolishes } = this.props;
     const polishes = _.intersectionBy(allPolishes, curPolishes, 'pID');
-    console.log(`Num cur polishes after intersection: ${polishes.length}`);
     this.setState({
       polishes,
-      tempPolishes: polishes,
-      refresh: !this.state.refresh
+      tempPolishes: polishes
     });
     return Promise.resolve();
   }
 
+  // Updates list if a polish was just added
   willFocus = this.props.navigation.addListener('willFocus', () => {
     this.props.clearEditMode();
     this.props.clearPolishState();
       if (this.state.listname !== 'All Polishes') {
-        this.getListContent();
-       // const listPromise = this.props.getPolishList(this.state.listid);
-       // Promise.all([listPromise]).then(() => this.getListContent());
+        this.props.getPolishList(this.state.listid)
+          .then(() => this.getListContent())
+            .then(() => this.setState({ loading: false, refresh: !this.state.refresh }));
       }
-    });
+  });
 
   scrollToTop() {
     this.flatListRef.scrollToIndex({ animated: true, index: 0 });
