@@ -30,13 +30,15 @@ class AddPolishToListScreen extends React.Component {
   }
 
   renderFooter() {
-    return (
-      <CardSection style={styles.footerStyle}>
-        <Button style={{ flex: 1 }} onPress={this.onAddPress.bind(this)}>
-          Add polish to selected lists
-        </Button>
-      </CardSection>
-    );
+    if (!this.props.loadingLists) {
+      return (
+        <CardSection style={styles.footerStyle}>
+          <Button style={{ flex: 1 }} onPress={this.onAddPress.bind(this)}>
+            Add polish to selected lists
+          </Button>
+        </CardSection>
+      );
+    }
   }
 
   renderItem(customList) {
