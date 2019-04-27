@@ -11,7 +11,7 @@ class FollowingScreen extends React.Component {
     return (
       <Card>
         <CardSection>
-          <Text>People management</Text>
+          <Text>Friends list is coming soon!</Text>
         </CardSection>
       </Card>
     );

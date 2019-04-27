@@ -23,6 +23,7 @@ const EditListButton = ({ onPress, screen }) => {
           onPress={onPress}
           underlayColor={'#CCDD1F'}
           color='#00BCD6'
+          size={20}
         />
     );
 };

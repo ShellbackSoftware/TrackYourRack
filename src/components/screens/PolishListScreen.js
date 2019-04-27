@@ -103,6 +103,7 @@ class PolishListScreen extends React.Component {
   willFocus = this.props.navigation.addListener('willFocus', () => {
     this.props.clearEditMode();
     this.props.clearPolishState();
+    this.props.clearSearchTerm();
     if (this.state.listid > 0) {
       this.props.getPolishList(this.state.listid)
         .then(() => this.getListContent())

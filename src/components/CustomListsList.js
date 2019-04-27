@@ -51,6 +51,7 @@ class CustomListsList extends React.Component {
     return (
       <CardSection style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-end' }}>
         <FlatList
+          style={{ flex: 1 }}
           ref={(ref) => { this.flatListRef = ref; }}
           data={this.props.lists}
           renderItem={this.renderItem}
