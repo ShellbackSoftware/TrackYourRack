@@ -8,7 +8,7 @@ import {
 import { connect } from 'react-redux';
 import NavigationService from '../components/helpers/NavigationService';
 import { CardSection } from './common';
-import { addSelPolish, remSelPolish } from '../actions';
+import { addSelList, remSelList } from '../actions';
 
 class CustomListItem extends React.Component {
   state = { selected: false };
@@ -17,10 +17,10 @@ class CustomListItem extends React.Component {
     if (this.props.addPolishToList) {
       if (this.state.selected) {
         this.setState({ selected: false });
-        this.props.remSelPolish(this.props.curPID);
+        this.props.remSelList(this.props.customList.item.listID);
       } else {
         this.setState({ selected: true });
-        this.props.addSelPolish(this.props.curPID);
+        this.props.addSelList(this.props.customList.item.listID);
       }
       return;
     }
@@ -70,4 +70,4 @@ const mapStateToProps = () => {
   return { };
 };
 
-export default connect(mapStateToProps, { addSelPolish, remSelPolish })(CustomListItem);
+export default connect(mapStateToProps, { addSelList, remSelList })(CustomListItem);

@@ -9,8 +9,8 @@ import {
   } from 'react-native';
 import { connect } from 'react-redux';
 import { Icon } from 'react-native-elements';
-import { getUserLists } from '../../actions';
-import { Card, CardSection, Spinner } from '../common';
+import { getUserLists, clearSelectedLists, addPolishToList } from '../../actions';
+import { Card, CardSection, Spinner, Button } from '../common';
 import CustomListItem from '../CustomListItem';
 
 class AddPolishToListScreen extends React.Component {
@@ -18,16 +18,37 @@ class AddPolishToListScreen extends React.Component {
     super(props);
     this.state = { polish: this.props.navigation.state.params };
     this.props.getUserLists(this.props.uid);
+    this.props.clearSelectedLists();
+  }
+
+  onAddPress() {
+    const uid = this.props.uid;
+    const adds = this.props.selectedLists.map((listid) => {
+      return this.props.addPolishToList(uid, listid, this.state.polish.pID);
+    });
+    Promise.all(adds).then(() => this.props.navigation.pop());
+  }
+
+  renderFooter() {
+    return (
+      <CardSection style={styles.footerStyle}>
+        <Button style={{ flex: 1 }} onPress={this.onAddPress.bind(this)}>
+          Add polish to selected lists
+        </Button>
+      </CardSection>
+    );
   }
 
   renderItem(customList) {
-    return (
-      <CustomListItem
-        curPID={this.state.polish.pID}
-        customList={customList}
-        addPolishToList
-      />
-    );
+    if (customList.item.listname !== this.props.curListName) {
+      return (
+        <CustomListItem
+          curPID={this.state.polish.pID}
+          customList={customList}
+          addPolishToList
+        />
+      );
+    }
   }
 
   renderLists() {
@@ -84,6 +105,8 @@ class AddPolishToListScreen extends React.Component {
       </CardSection>
 
         {this.renderLists()}
+
+        {this.renderFooter()}
       </Card>
       </TouchableWithoutFeedback>
       </View>
@@ -127,8 +150,11 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   const { uid } = state.auth;
-  const { loadingLists, userLists } = state.lists;
-  return { uid, loadingLists, userLists };
+  const { loadingLists, userLists, selectedLists } = state.lists;
+  const { curListName } = state.polishes;
+  return { uid, loadingLists, userLists, selectedLists, curListName };
 };
 
-export default connect(mapStateToProps, { getUserLists })(AddPolishToListScreen);
+export default connect(mapStateToProps, {
+  getUserLists, clearSelectedLists, addPolishToList
+})(AddPolishToListScreen);

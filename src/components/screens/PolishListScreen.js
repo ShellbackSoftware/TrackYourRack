@@ -34,7 +34,7 @@ class PolishListScreen extends React.Component {
       loading: false,
       refresh: false      // Used to refresh the list
     };
-    this.props.setListName(this.state.listname);
+    this.props.setListName({ listname: this.state.listname, listid: this.state.listid });
     if (this.state.listid > 0) {
       this.props.getPolishList(this.state.listid).then(() => this.getListContent());
     } else {

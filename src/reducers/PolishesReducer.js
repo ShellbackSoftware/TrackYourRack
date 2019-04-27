@@ -22,7 +22,8 @@ const INITIAL_STATE = {
   editMode: false,
   selectedPolishes: [],
   brands: [],
-  curListName: ''
+  curListName: '',
+  curListID: null
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -39,9 +40,9 @@ export default (state = INITIAL_STATE, action) => {
     case SET_BRANDS:
       return { ...state, brands: info };
     case SET_LIST_NAME:
-      return { ...state, curListName: info };
+      return { ...state, curListName: info.listname, curListID: info.listid };
     case CLEAR_POLISH_STATE:
-      return { ...state, curPolishes: [], selectedPolishes: [] };
+      return { ...state, curPolishes: [], selectedPolishes: [], loadingPolish: false };
     case SEARCH_TERM_CHANGED:
       return { ...state, searchTerm: info };
     case CLEAR_SEARCH_TERM:

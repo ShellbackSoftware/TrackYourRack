@@ -6,14 +6,18 @@ import {
   LIST_DELETED,
   CLEAR_LISTNAME,
   OPEN_MODAL,
-  CLOSE_MODAL
+  CLOSE_MODAL,
+  ADD_SEL_LIST,
+  REM_SEL_LIST,
+  CLEAR_SEL_LISTS
  } from '../actions/constants';
 
 const INITIAL_STATE = {
   loadingLists: false,
   userLists: [],
   listname: '',
-  showModal: false
+  showModal: false,
+  selectedLists: []
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -35,6 +39,16 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, showModal: true, loadingLists: true };
     case CLOSE_MODAL:
       return { ...state, showModal: false, loadingLists: false };
+    case CLEAR_SEL_LISTS:
+      return { ...state, selectedLists: [] };
+    case ADD_SEL_LIST:
+      return { ...state, selectedLists: [...state.selectedLists, info] };
+    case REM_SEL_LIST:
+      return {
+        ...state,
+        selectedLists: state.selectedLists.filter(
+          (list) => list !== info)
+          };
     default:
       return state;
  }

@@ -9,7 +9,10 @@ import {
   LIST_DELETED,
   CLEAR_LISTNAME,
   OPEN_MODAL,
-  CLOSE_MODAL
+  CLOSE_MODAL,
+  ADD_SEL_LIST,
+  REM_SEL_LIST,
+  CLEAR_SEL_LISTS
 } from './constants';
 
 export const selectList = (dispatch, listId) => {
@@ -106,6 +109,31 @@ export const deleteList = (uid, listid) => {
         type: LIST_DELETED
       });
       NavigationService.navigate('Home');
+    });
+  };
+};
+
+export const clearSelectedLists = () => {
+  return (dispatch) => {
+    dispatch({ type: CLEAR_SEL_LISTS });
+  };
+};
+
+// Add / remove from selected custom lists
+export const addSelList = (listid) => {
+  return (dispatch) => {
+     dispatch({
+       type: ADD_SEL_LIST,
+       payload: listid
+     });
+   };
+ };
+
+export const remSelList = (listid) => {
+  return (dispatch) => {
+    dispatch({
+      type: REM_SEL_LIST,
+      payload: listid
     });
   };
 };
