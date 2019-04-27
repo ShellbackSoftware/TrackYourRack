@@ -21,7 +21,13 @@ class AddPolishToListScreen extends React.Component {
   }
 
   renderItem(customList) {
-    return <CustomListItem customList={customList} addPolishToList />;
+    return (
+      <CustomListItem
+        curPID={this.state.polish.pID}
+        customList={customList}
+        addPolishToList
+      />
+    );
   }
 
   renderLists() {
@@ -33,7 +39,7 @@ class AddPolishToListScreen extends React.Component {
         <FlatList
           ref={(ref) => { this.flatListRef = ref; }}
           data={this.props.userLists}
-          renderItem={this.renderItem}
+          renderItem={this.renderItem.bind(this)}
           keyExtractor={customList => customList.listID.toString()}
           removeClippedSubviews
           extraData={this.props}

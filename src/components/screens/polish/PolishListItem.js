@@ -127,8 +127,8 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  const { editMode, selectedPolishes, curListName } = state.polishes;
-  return { editMode, selectedPolishes, curListName };
+  const { editMode, curListName } = state.polishes;
+  return { editMode, curListName };
 };
 
 export default connect(mapStateToProps, {

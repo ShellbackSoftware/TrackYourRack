@@ -5,19 +5,39 @@ import {
       TouchableOpacity,
       View
       } from 'react-native';
+import { connect } from 'react-redux';
 import NavigationService from '../components/helpers/NavigationService';
 import { CardSection } from './common';
+import { addSelPolish, remSelPolish } from '../actions';
 
 class CustomListItem extends React.Component {
   state = { selected: false };
 
   onRowPress() {
     if (this.props.addPolishToList) {
-      console.log('Select this');
+      if (this.state.selected) {
+        this.setState({ selected: false });
+        this.props.remSelPolish(this.props.curPID);
+      } else {
+        this.setState({ selected: true });
+        this.props.addSelPolish(this.props.curPID);
+      }
       return;
     }
     const { listname, listID } = this.props.customList.item;
     NavigationService.navigate('PolishList', { listname, listID });
+  }
+
+  setStyle() {
+    if (this.state.selected) {
+      return {
+        backgroundColor: '#B39DD6',
+        justifyContent: 'center'
+      };
+    }
+    return {
+      justifyContent: 'center'
+    };
   }
 
   render() {
@@ -27,7 +47,7 @@ class CustomListItem extends React.Component {
         onPress={this.onRowPress.bind(this)}
       >
         <View>
-          <CardSection style={styles.containerStyle}>
+          <CardSection style={this.setStyle()}>
           <Text style={styles.titleStyle}>
             {listname}
           </Text>
@@ -39,9 +59,6 @@ class CustomListItem extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  containerStyle: {
-    justifyContent: 'center'
-  },
   titleStyle: {
     fontSize: 18,
     paddingLeft: 15,
@@ -49,4 +66,8 @@ const styles = StyleSheet.create({
   }
 });
 
-export default CustomListItem;
+const mapStateToProps = () => {
+  return { };
+};
+
+export default connect(mapStateToProps, { addSelPolish, remSelPolish })(CustomListItem);
