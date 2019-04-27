@@ -11,6 +11,7 @@ class EditListScreen extends React.Component {
   }
 
   deleteList() {
+    // TODO: Add a confirmation popup
     const curList = this.props.navigation.getParam('curList', 'List');
     this.props.deleteList(this.props.uid, curList.listID);
   }

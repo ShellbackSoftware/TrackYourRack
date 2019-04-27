@@ -15,18 +15,19 @@ import CustomListsList from '../CustomListsList';
 class HomeScreen extends React.Component {
   componentDidMount() {
     this.props.getUserLists(this.props.uid);
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
   }
 
-  componentWillUnmount() {
+  willBlur = this.props.navigation.addListener('willBlur', () => {
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
-  }
+    }
+  );
 
   willFocus = this.props.navigation.addListener('willFocus', () => {
       this.props.getUserLists(this.props.uid);
       if (this.props.fromUpload) {
         this.props.getAllPolishes();
       }
+      BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
   );
 

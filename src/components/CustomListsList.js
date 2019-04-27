@@ -12,9 +12,6 @@ class CustomListsList extends React.Component {
   }
 
   renderScrollButton() {
-    if (this.props.addPolishToList) {
-      return;
-    }
     return (
         <Icon
           raised

@@ -1,9 +1,8 @@
 import React from 'react';
-import { Text, View, TouchableWithoutFeedback, Modal, StyleSheet } from 'react-native';
+import { Text, View, TouchableWithoutFeedback, Modal, StyleSheet, FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import { getUserLists } from '../../actions';
 import { Card, CardSection, Spinner } from '../common';
-import CustomListsList from '../CustomListsList';
 
 class AddPolishToListScreen extends React.Component {
   constructor(props) {
@@ -21,10 +20,19 @@ class AddPolishToListScreen extends React.Component {
       return <CardSection style={{ flex: 1 }}><Spinner /></CardSection>;
     }
     return (
-      <CustomListsList
-        addPolishToList
-        onPress={() => this.onButtonPress.bind(this)}
-      />
+      <CardSection style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-end' }}>
+        <FlatList
+          style={{ flex: 1 }}
+          ref={(ref) => { this.flatListRef = ref; }}
+          data={this.props.lists}
+          renderItem={this.renderItem}
+          keyExtractor={customList => customList.listID.toString()}
+          ListFooterComponent={this.renderFooter()}
+          ListHeaderComponent={this.renderHeader()}
+          removeClippedSubviews
+          extraData={this.props}
+        />
+      </CardSection>
     );
   }
 
