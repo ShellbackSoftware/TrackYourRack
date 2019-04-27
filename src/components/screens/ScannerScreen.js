@@ -11,7 +11,7 @@ class ScannerScreen extends React.Component {
     return (
       <Card>
         <CardSection>
-          <Text>Barcode Scanner</Text>
+          <Text>Barcode scanner coming soon!</Text>
         </CardSection>
       </Card>
     );

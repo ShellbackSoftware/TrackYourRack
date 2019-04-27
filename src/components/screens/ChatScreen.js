@@ -11,7 +11,7 @@ class ChatScreen extends React.Component {
     return (
       <Card>
         <CardSection>
-          <Text>Messaging system</Text>
+          <Text>Chat is coming soon!</Text>
         </CardSection>
       </Card>
     );

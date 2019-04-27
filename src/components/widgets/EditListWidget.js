@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Text, View, StyleSheet, FlatList } from 'react-native';
-import { SearchBar } from 'react-native-elements';
+import { SearchBar, Icon } from 'react-native-elements';
 import NavigationService from '../helpers/NavigationService';
 import { Button, CardSection, Spinner } from '../common';
 import {
@@ -115,12 +115,23 @@ class EditListWidget extends React.Component {
       sectionStyle,
       titleStyle,
       headerStyle,
-      footerStyle
+      footerStyle,
+      buttonStyle
     } = styles;
     return (
       <View style={containerStyle}>
         <CardSection style={headerStyle}>
+        <Icon
+          name='arrow-left'
+          type='evilicon'
+          containerStyle={buttonStyle}
+          onPress={() => this.props.navigation.pop()}
+          underlayColor={'#CCDD1F'}
+          color='#00BCD6'
+          size={40}
+        />
           <Text style={titleStyle}>Add Polishes To {this.state.listname}</Text>
+        <View style={{ flex: 0.5 }} />
         </CardSection>
 
         <CardSection>
@@ -152,7 +163,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   titleStyle: {
-    flex: 1,
+    flex: 3,
     fontSize: 18,
     textAlign: 'center',
     lineHeight: 40
@@ -167,6 +178,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0
   },
   headerStyle: {
+    display: 'flex',
+    flexDirection: 'row',
     height: 50
   },
   footerStyle: {
@@ -174,6 +187,13 @@ const styles = StyleSheet.create({
   },
   searchContainerStyle: {
     flex: 1
+  },
+  buttonStyle: {
+    flex: 0.5,
+    justifyContent: 'flex-start',
+    alignSelf: 'center',
+    marginLeft: 5,
+    marginRight: 5
   }
 });
 

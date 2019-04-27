@@ -11,7 +11,7 @@ class ProfileScreen extends React.Component {
     return (
       <Card>
         <CardSection>
-          <Text>Profile Management</Text>
+          <Text>Profiles coming soon!</Text>
         </CardSection>
       </Card>
     );

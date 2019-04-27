@@ -57,6 +57,7 @@ class AddPolishToListScreen extends React.Component {
 
 const styles = StyleSheet.create({
   sectionStyle: {
+    flex: 1,
     justifyContent: 'center'
   },
   titleStyle: {
