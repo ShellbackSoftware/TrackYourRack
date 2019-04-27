@@ -9,7 +9,13 @@ import NavigationService from '../components/helpers/NavigationService';
 import { CardSection } from './common';
 
 class CustomListItem extends React.Component {
+  state = { selected: false };
+
   onRowPress() {
+    if (this.props.addPolishToList) {
+      console.log('Select this');
+      return;
+    }
     const { listname, listID } = this.props.customList.item;
     NavigationService.navigate('PolishList', { listname, listID });
   }

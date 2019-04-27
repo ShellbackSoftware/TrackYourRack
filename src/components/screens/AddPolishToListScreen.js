@@ -1,8 +1,17 @@
 import React from 'react';
-import { Text, View, TouchableWithoutFeedback, Modal, StyleSheet, FlatList } from 'react-native';
+import {
+  Text,
+  View,
+  TouchableWithoutFeedback,
+  Modal,
+  StyleSheet,
+  FlatList
+  } from 'react-native';
 import { connect } from 'react-redux';
+import { Icon } from 'react-native-elements';
 import { getUserLists } from '../../actions';
 import { Card, CardSection, Spinner } from '../common';
+import CustomListItem from '../CustomListItem';
 
 class AddPolishToListScreen extends React.Component {
   constructor(props) {
@@ -11,8 +20,8 @@ class AddPolishToListScreen extends React.Component {
     this.props.getUserLists(this.props.uid);
   }
 
-  onButtonPress() {
-    console.log(this.state);
+  renderItem(customList) {
+    return <CustomListItem customList={customList} addPolishToList />;
   }
 
   renderLists() {
@@ -20,15 +29,12 @@ class AddPolishToListScreen extends React.Component {
       return <CardSection style={{ flex: 1 }}><Spinner /></CardSection>;
     }
     return (
-      <CardSection style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-end' }}>
+      <CardSection style={styles.sectionStyle}>
         <FlatList
-          style={{ flex: 1 }}
           ref={(ref) => { this.flatListRef = ref; }}
-          data={this.props.lists}
+          data={this.props.userLists}
           renderItem={this.renderItem}
           keyExtractor={customList => customList.listID.toString()}
-          ListFooterComponent={this.renderFooter()}
-          ListHeaderComponent={this.renderHeader()}
           removeClippedSubviews
           extraData={this.props}
         />
@@ -36,9 +42,10 @@ class AddPolishToListScreen extends React.Component {
     );
   }
 
+  // TODO: Scale the header correctly "Add {polish} to..."
   render() {
     const { polish } = this.state;
-    const { containerStyle } = styles;
+    const { containerStyle, headerStyle, buttonStyle, titleStyle } = styles;
     return (
       <Modal
       transparent
@@ -48,10 +55,27 @@ class AddPolishToListScreen extends React.Component {
       <TouchableWithoutFeedback onPress={() => this.props.navigation.pop()}>
       <View style={containerStyle}>
       <TouchableWithoutFeedback>
-      <Card>
-        <CardSection>
-          <Text>Which list would you like to add {polish.pName} to?</Text>
-        </CardSection>
+      <Card style={{ display: 'flex', flex: 1 }}>
+      <CardSection style={headerStyle}>
+        <Icon
+          name='arrow-left'
+          type='evilicon'
+          containerStyle={buttonStyle}
+          onPress={() => this.props.navigation.pop()}
+          underlayColor={'#CCDD1F'}
+          color='#00BCD6'
+          size={40}
+        />
+          <Text
+            adjustsFontSizeToFit
+            allowFontScaling
+            style={titleStyle}
+            numberOfLines={1}
+          >
+            Add {polish.pName} to ...
+          </Text>
+        <View style={{ flex: 0.5 }} />
+      </CardSection>
 
         {this.renderLists()}
       </Card>
@@ -69,9 +93,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   titleStyle: {
-    flex: 1,
-    fontSize: 18,
+    flex: 3,
+    //fontSize: 18,
     textAlign: 'center',
+    alignSelf: 'stretch',
     lineHeight: 40
   },
   containerStyle: {
@@ -79,13 +104,25 @@ const styles = StyleSheet.create({
     position: 'relative',
     flex: 1,
     justifyContent: 'center'
-  }
+  },
+  buttonStyle: {
+    flex: 0.5,
+    justifyContent: 'flex-start',
+    alignSelf: 'center',
+    marginLeft: 5,
+    marginRight: 5
+  },
+  headerStyle: {
+    display: 'flex',
+    flexDirection: 'row',
+    height: 50
+  },
 });
 
 const mapStateToProps = state => {
   const { uid } = state.auth;
-  const { loadingLists } = state.lists;
-  return { uid, loadingLists };
+  const { loadingLists, userLists } = state.lists;
+  return { uid, loadingLists, userLists };
 };
 
 export default connect(mapStateToProps, { getUserLists })(AddPolishToListScreen);
