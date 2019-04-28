@@ -16,18 +16,19 @@ import { CardSection, Button, Input, Spinner } from '../common';
 
 class AddPolishScreen extends React.Component {
   state = {
-      error: false,
-      pCollection: '',
-      pNumber: '',
-      pFinish: '',
-      pSeason: '',
-      pYear: '',
-      pSite: '',
-      pSwatch: null,
-      uid: this.props.uid,
-      filename: '',
-      pBrand: ''
-    };
+    query: '',
+    error: false,
+    pCollection: '',
+    pNumber: '',
+    pFinish: '',
+    pSeason: '',
+    pYear: '',
+    pSite: '',
+    pSwatch: null,
+    uid: this.props.uid,
+    filename: '',
+    pBrand: ''
+  };
 
   ontextChange(field, value) {
     this.setState({ [field]: value });
@@ -41,6 +42,16 @@ class AddPolishScreen extends React.Component {
     } else {
       this.props.addSinglePolish(this.state, this.props.token, 'Home');
     }
+  }
+
+  findBrand(query) {
+    if (query === '') {
+      return [];
+    }
+
+    const { brands } = this.props;
+    const regex = new RegExp(`${query.trim()}`, 'i');
+    return brands.filter(brand => brand.search(regex) >= 0);
   }
 
   async pickImage() {
@@ -59,7 +70,9 @@ class AddPolishScreen extends React.Component {
 
   renderItem(brand) {
     return (
-      <TouchableOpacity onPress={() => this.setState({ pBrand: brand.trim() })}>
+      <TouchableOpacity
+        onPress={() => this.setState({ pBrand: brand.trim(), query: brand.trim() })}
+      >
         <Text>{brand}</Text>
       </TouchableOpacity>
     );
@@ -102,11 +115,14 @@ class AddPolishScreen extends React.Component {
       sectionStyle,
       uploadBtnStyle,
       imageStyle,
-      autoStyle,
-      autoContainerStyle,
-      labelStyle
+      acContainerStyle,
+      labelStyle,
+      acListStyle
     } = styles;
     const { navigation } = this.props;
+    const { query } = this.state;
+    const brands = this.findBrand(query);
+    const comp = (a, b) => a.toLowerCase().trim() === b.toLowerCase().trim();
     return (
       <View>
         <CardSection style={sectionStyle}>
@@ -123,25 +139,18 @@ class AddPolishScreen extends React.Component {
         </CardSection>
 
         <CardSection style={sectionStyle}>
-        <View style={autoContainerStyle}>
           <Text style={labelStyle}>Brand *</Text>
-          <Autocomplete
-            data={this.props.brands}
-            defaultValue={this.state.pBrand}
-            placeholder='China Glaze'
-            onChangeText={this.ontextChange.bind(this, 'pBrand')}
-            renderItem={(brand) => this.renderItem(brand)}
-            autoCorrect={false}
-            autoCapitalize='none'
-            containerStyle={autoStyle}
-          />
-        </View>
-         {/* <Input
-            label='Brand *'
-            placeholder='China Glaze'
-            onChangeText={this.ontextChange.bind(this, 'pBrand')}
-            value={this.state.pBrand}
-         />*/ }
+            <View style={acContainerStyle}>
+            <Autocomplete
+              autoCapitalize="none"
+              autoCorrect={false}
+              listContainerStyle={acListStyle}
+              data={brands.length === 1 && comp(query, brands[0]) ? [] : brands}
+              defaultValue={query}
+              onChangeText={text => this.setState({ query: text })}
+              renderItem={this.renderItem.bind(this)}
+            />
+          </View>
         </CardSection>
 
         <CardSection style={sectionStyle}>
@@ -275,20 +284,29 @@ const styles = StyleSheet.create({
     height: 75
   },
   labelStyle: {
+    fontSize: 18,
+    paddingLeft: 20,
     flex: 1
   },
-  autoStyle: {
-    flex: 2,
-    left: 0,
-    position: 'absolute',
+  acContainerStyle: {
+    height: 20,
     right: 0,
-    top: 0,
-    zIndex: 1
+    width: '75%',
+    flex: 3,
+    position: 'absolute'
   },
-  autoContainerStyle: {
+  /*acListStyle: {
+    maxHeight: 60,
+    right: 0,
+    top: 21,
+    width: '100%',
     flex: 1,
-    paddingTop: 15,
-    paddingBottom: 15
+    position: 'absolute',
+    zIndex: 999
+  },*/
+  acitemText: {
+    fontSize: 15,
+    margin: 2
   }
 });
 
