@@ -71,7 +71,10 @@ class AddPolishScreen extends React.Component {
   renderItem(brand) {
     return (
       <TouchableOpacity
-        onPress={() => this.setState({ pBrand: brand.trim(), query: brand.trim() })}
+        onPress={() => {
+          this.setState({ pBrand: brand.trim(), query: brand.trim() });
+          console.log('Tapped');
+        }}
       >
         <Text>{brand}</Text>
       </TouchableOpacity>
@@ -117,7 +120,9 @@ class AddPolishScreen extends React.Component {
       imageStyle,
       acContainerStyle,
       labelStyle,
-      acListStyle
+      acListStyle,
+      acSectionStyle,
+      acInputStyle
     } = styles;
     const { navigation } = this.props;
     const { query } = this.state;
@@ -138,13 +143,15 @@ class AddPolishScreen extends React.Component {
           />
         </CardSection>
 
-        <CardSection style={sectionStyle}>
+        <CardSection style={acSectionStyle}>
           <Text style={labelStyle}>Brand *</Text>
             <View style={acContainerStyle}>
             <Autocomplete
-              autoCapitalize="none"
+              autoCapitalize='none'
               autoCorrect={false}
-              listContainerStyle={acListStyle}
+              listStyle={acListStyle}
+              inputContainerStyle={acInputStyle}
+              //listContainerStyle={acListStyle}
               data={brands.length === 1 && comp(query, brands[0]) ? [] : brands}
               defaultValue={query}
               onChangeText={text => this.setState({ query: text })}
@@ -269,7 +276,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.75)',
     position: 'relative',
     flex: 1,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    zIndex: 1
   },
   errorTextStyle: {
     fontSize: 20,
@@ -288,25 +296,34 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     flex: 1
   },
+  acSectionStyle: {
+    justifyContent: 'center',
+    zIndex: 1,
+    height: 40
+  },
   acContainerStyle: {
+    borderBottomWidth: 1,
+    borderColor: '#ddd',
     height: 20,
     right: 0,
     width: '75%',
     flex: 3,
-    position: 'absolute'
-  },
-  /*acListStyle: {
-    maxHeight: 60,
-    right: 0,
-    top: 21,
-    width: '100%',
-    flex: 1,
     position: 'absolute',
-    zIndex: 999
-  },*/
-  acitemText: {
-    fontSize: 15,
-    margin: 2
+    zIndex: 2
+  },
+  acListStyle: {
+    zIndex: 10,
+    position: 'relative',
+    minHeight: 20,
+    maxHeight: 100,
+    borderTopWidth: 1,
+    borderColor: '#ddd'
+  },
+  acInputStyle: {
+    height: 40,
+    borderLeftWidth: 0,
+    //padding: 5,
+    backgroundColor: '#fff'
   }
 });
 
