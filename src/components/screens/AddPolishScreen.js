@@ -6,7 +6,8 @@ import {
   View,
   TouchableWithoutFeedback,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+ // Keyboard
   } from 'react-native';
 import { connect } from 'react-redux';
 import Autocomplete from 'react-native-autocomplete-input';
@@ -16,6 +17,7 @@ import { CardSection, Button, Input, Spinner } from '../common';
 
 class AddPolishScreen extends React.Component {
   state = {
+    hideResults: false,
     query: '',
     error: false,
     pCollection: '',
@@ -74,9 +76,10 @@ class AddPolishScreen extends React.Component {
         onPress={() => {
           this.setState({ pBrand: brand.trim(), query: brand.trim() });
           console.log('Tapped');
+         // Keyboard.dismiss();
         }}
       >
-        <Text>{brand}</Text>
+        <Text style={styles.listItemStyle}>{brand}</Text>
       </TouchableOpacity>
     );
   }
@@ -145,17 +148,26 @@ class AddPolishScreen extends React.Component {
 
         <CardSection style={acSectionStyle}>
           <Text style={labelStyle}>Brand *</Text>
-            <View style={acContainerStyle}>
+            <View
+              style={acContainerStyle}
+              pointerEvents={'auto'}
+            >
             <Autocomplete
               autoCapitalize='none'
               autoCorrect={false}
               listStyle={acListStyle}
               inputContainerStyle={acInputStyle}
-              //listContainerStyle={acListStyle}
+              listContainerStyle={acListStyle}
               data={brands.length === 1 && comp(query, brands[0]) ? [] : brands}
               defaultValue={query}
               onChangeText={text => this.setState({ query: text })}
               renderItem={this.renderItem.bind(this)}
+              flatListProps={{
+                keyboardShouldPersistTaps: 'always'
+              }}
+              hideResults={this.state.hideResults ? this.state.hideResults : undefined}
+              onBlur={() => this.setState({ hideResults: true })}
+              onFocus={() => this.setState({ hideResults: false })}
             />
           </View>
         </CardSection>
@@ -314,7 +326,7 @@ const styles = StyleSheet.create({
   acListStyle: {
     zIndex: 10,
     position: 'relative',
-    minHeight: 20,
+    minHeight: 25,
     maxHeight: 100,
     borderTopWidth: 1,
     borderColor: '#ddd'
@@ -322,8 +334,10 @@ const styles = StyleSheet.create({
   acInputStyle: {
     height: 40,
     borderLeftWidth: 0,
-    //padding: 5,
     backgroundColor: '#fff'
+  },
+  listItemStyle: {
+    fontSize: 16
   }
 });
 
