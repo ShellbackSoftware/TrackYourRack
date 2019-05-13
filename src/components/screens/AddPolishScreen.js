@@ -150,7 +150,8 @@ class AddPolishScreen extends React.Component {
 
         <CardSection style={acSectionStyle}>
           <Text style={labelStyle}>Brand *</Text>
-            <View style={acContainerStyle}>
+        </CardSection>
+        <View style={acContainerStyle}>
             <Autocomplete
               autoCorrect={false}
               listStyle={acListStyle}
@@ -168,7 +169,6 @@ class AddPolishScreen extends React.Component {
               onFocus={() => this.setState({ hideResults: false })}
             />
           </View>
-        </CardSection>
 
         <CardSection style={sectionStyle}>
           <Input
@@ -314,10 +314,11 @@ const styles = StyleSheet.create({
   },
   acContainerStyle: {
     right: 0,
-    width: '75%',
+    top: 102,
+    width: '72%',
     flex: 1,
     position: 'absolute',
-    zIndex: 2
+    zIndex: 10
   },
   acListStyle: {
     minHeight: 25,
