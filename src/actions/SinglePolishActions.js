@@ -51,9 +51,13 @@ export const addSinglePolish = (polish, token, route) => {
         return res.json();
       }
     })
-    .then(pID => {
+    .then(resInfo => {
       dispatch({ type: FINISH_SINGLE_UPLOAD });
-      NavigationService.navigate(route);
+      if (resInfo !== undefined) {
+        NavigationService.navigate(route);
+      } else {
+        return;
+      }
     });
   };
 };
