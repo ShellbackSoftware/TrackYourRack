@@ -21,7 +21,7 @@ const EditListButton = ({ onPress, screen }) => {
           type='font-awesome'
           containerStyle={buttonStyle}
           onPress={onPress}
-          underlayColor={'#CCDD1F'}
+          underlayColor={'#00BCD6'} // Background color on tap
           color='#00BCD6'
           size={20}
         />

@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
   Image,
   TouchableOpacity,
+  Dimensions
  // Keyboard
   } from 'react-native';
 import { connect } from 'react-redux';
@@ -73,9 +74,9 @@ class AddPolishScreen extends React.Component {
   renderItem(brand) {
     return (
       <TouchableOpacity
+        style={{ width: '100%', height: 25 }}
         onPress={() => {
           this.setState({ pBrand: brand.trim(), query: brand.trim() });
-          console.log('Tapped');
          // Keyboard.dismiss();
         }}
       >
@@ -125,7 +126,8 @@ class AddPolishScreen extends React.Component {
       labelStyle,
       acListStyle,
       acSectionStyle,
-      acInputStyle
+      acTextStyle,
+      acTextContainerStyle
     } = styles;
     const { navigation } = this.props;
     const { query } = this.state;
@@ -148,23 +150,19 @@ class AddPolishScreen extends React.Component {
 
         <CardSection style={acSectionStyle}>
           <Text style={labelStyle}>Brand *</Text>
-            <View
-              style={acContainerStyle}
-              pointerEvents={'auto'}
-            >
+            <View style={acContainerStyle}>
             <Autocomplete
-              autoCapitalize='none'
               autoCorrect={false}
               listStyle={acListStyle}
-              inputContainerStyle={acInputStyle}
-              listContainerStyle={acListStyle}
+              //listContainerStyle={{ flex: 1, zIndex: 3 }}
+              // Text input container
+              inputContainerStyle={acTextContainerStyle}
+              style={acTextStyle}
+              placeholder='China Glaze'
               data={brands.length === 1 && comp(query, brands[0]) ? [] : brands}
               defaultValue={query}
               onChangeText={text => this.setState({ query: text })}
               renderItem={this.renderItem.bind(this)}
-              flatListProps={{
-                keyboardShouldPersistTaps: 'always'
-              }}
               hideResults={this.state.hideResults ? this.state.hideResults : undefined}
               onBlur={() => this.setState({ hideResults: true })}
               onFocus={() => this.setState({ hideResults: false })}
@@ -286,8 +284,9 @@ const styles = StyleSheet.create({
   },
   containerStyle: {
     backgroundColor: 'rgba(0, 0, 0, 0.75)',
-    position: 'relative',
-    flex: 1,
+    position: 'absolute',
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
     justifyContent: 'center',
     zIndex: 1
   },
@@ -310,34 +309,42 @@ const styles = StyleSheet.create({
   },
   acSectionStyle: {
     justifyContent: 'center',
-    zIndex: 1,
+    zIndex: 10,
     height: 40
   },
   acContainerStyle: {
-    borderBottomWidth: 1,
-    borderColor: '#ddd',
-    height: 20,
     right: 0,
     width: '75%',
-    flex: 3,
+    flex: 1,
     position: 'absolute',
     zIndex: 2
   },
   acListStyle: {
-    zIndex: 10,
-    position: 'relative',
     minHeight: 25,
     maxHeight: 100,
-    borderTopWidth: 1,
-    borderColor: '#ddd'
+    width: '95%',
+    zIndex: 5
   },
-  acInputStyle: {
-    height: 40,
-    borderLeftWidth: 0,
-    backgroundColor: '#fff'
+  acTextStyle: {
+    width: '95%',
+    color: '#000',
+    paddingRight: 5,
+    paddingLeft: 6,
+    fontSize: 18,
+    lineHeight: 23,
+    flex: 3,
+    zIndex: 5
+  },
+  acTextContainerStyle: {
+    borderWidth: 0,
+    justifyContent: 'center',
+    height: 40
   },
   listItemStyle: {
-    fontSize: 16
+    fontSize: 16,
+    paddingLeft: 1,
+    justifyContent: 'center',
+    alignSelf: 'flex-start'
   }
 });
 

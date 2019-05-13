@@ -52,6 +52,7 @@ class AboutScreen extends React.Component {
           <Text>4. Multiple swatches per polish</Text>
           <Text>5. Barcode scanner</Text>
           <Text>6. Chat</Text>
+          <Text>7. Rating system for polishes</Text>
           <Text>Of course, there will be aesthetic changes periodically as we near full release, so any and all feedback is welcome! You can email me at <A url='mailto:admin@shellbacksoftware.com' title='admin@shellbacksoftware.com' /></Text>
           </ScrollView>
         </CardSection>
