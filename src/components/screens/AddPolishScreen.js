@@ -8,7 +8,6 @@ import {
   Image,
   TouchableOpacity,
   Dimensions
- // Keyboard
   } from 'react-native';
 import { connect } from 'react-redux';
 import Autocomplete from 'react-native-autocomplete-input';
@@ -19,7 +18,7 @@ import { CardSection, Button, Input, Spinner } from '../common';
 class AddPolishScreen extends React.Component {
   state = {
     hideResults: false,
-    query: '',
+    pBrand: '',
     error: false,
     pCollection: '',
     pNumber: '',
@@ -29,13 +28,16 @@ class AddPolishScreen extends React.Component {
     pSite: '',
     pSwatch: null,
     uid: this.props.uid,
-    filename: '',
-    pBrand: ''
+    filename: ''
   };
 
   ontextChange(field, value) {
     this.setState({ [field]: value });
   }
+
+  willFocus = this.props.navigation.addListener('willFocus', () => {
+   this.setState({ error: false });
+  });
 
   addPolish() {
     this.setState({ error: false });
@@ -47,13 +49,13 @@ class AddPolishScreen extends React.Component {
     }
   }
 
-  findBrand(query) {
-    if (query === '') {
+  findBrand(pBrand) {
+    if (pBrand === '') {
       return [];
     }
 
     const { brands } = this.props;
-    const regex = new RegExp(`${query.trim()}`, 'i');
+    const regex = new RegExp(`${pBrand.trim()}`, 'i');
     return brands.filter(brand => brand.search(regex) >= 0);
   }
 
@@ -76,8 +78,7 @@ class AddPolishScreen extends React.Component {
       <TouchableOpacity
         style={{ width: '100%', height: 25 }}
         onPress={() => {
-          this.setState({ pBrand: brand.trim(), query: brand.trim() });
-         // Keyboard.dismiss();
+          this.setState({ pBrand: brand.trim() });
         }}
       >
         <Text style={styles.listItemStyle}>{brand}</Text>
@@ -130,8 +131,8 @@ class AddPolishScreen extends React.Component {
       acTextContainerStyle
     } = styles;
     const { navigation } = this.props;
-    const { query } = this.state;
-    const brands = this.findBrand(query);
+    const { pBrand } = this.state;
+    const brands = this.findBrand(pBrand);
     const comp = (a, b) => a.toLowerCase().trim() === b.toLowerCase().trim();
     return (
       <View>
@@ -160,9 +161,9 @@ class AddPolishScreen extends React.Component {
               inputContainerStyle={acTextContainerStyle}
               style={acTextStyle}
               placeholder='China Glaze'
-              data={brands.length === 1 && comp(query, brands[0]) ? [] : brands}
-              defaultValue={query}
-              onChangeText={text => this.setState({ query: text })}
+              data={brands.length === 1 && comp(pBrand, brands[0]) ? [] : brands}
+              defaultValue={pBrand}
+              onChangeText={text => this.setState({ pBrand: text })}
               renderItem={this.renderItem.bind(this)}
               hideResults={this.state.hideResults ? this.state.hideResults : undefined}
               onBlur={() => this.setState({ hideResults: true })}

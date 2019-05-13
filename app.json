@@ -24,6 +24,8 @@
     ],
     "ios": {
       "supportsTablet": true
-    }
+    },
+    "description": "An app for tracking your nail polish collection",
+    "githubUrl": "https://github.com/ShellbackSoftware/TrackYourRack"
   }
 }
