@@ -70,7 +70,7 @@ export default (state = INITIAL_STATE, action) => {
       case REGISTER_USER_FAIL:
         return { ...state, error: info, loading: false };
       case CLEAR_MESSAGE:
-        return { ...state, message: '' };
+        return { ...state, message: '', error: '' };
       case PASS_RESET_SUCCESS:
         return { ...state, loading: false, message: info };
       case PASS_RESET_FAIL:

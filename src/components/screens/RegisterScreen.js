@@ -22,7 +22,6 @@ class RegisterScreen extends React.Component {
     if (this.verifyInput()) {
       const { name, mail } = this.state;
       this.props.registerUser({ name, mail });
-      //this.setState({ message: `Thank you for registering at Shellback Software! Please check your email (${mail}) for further instructions.` });
     }
   }
 

@@ -108,8 +108,8 @@ export const registerUser = ({ name, mail }) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        name: { value: name },
-        mail: { value: mail }
+        name: [name],
+        mail: [mail]
       }),
     })
     .then(res => {
@@ -132,25 +132,11 @@ export const registerUser = ({ name, mail }) => {
         return res.json();
       }
     })
-    .then(() => dispatch({ type: REGISTER_USER,
-      payload: `Thank you for registering at Shellback Software!
-      Please check your email (${mail}) for further instructions.` }));
-  };
-};
-// eslint-disable-next-line
-const registerSuccess = (user) => {
-  return (dispatch) => {
-    dispatch({
-      type: REGISTER_USER,
-      payload: user
+    .then(() => {
+      dispatch({ type: REGISTER_USER,
+        payload: `Thank you for registering at Shellback Software!
+        Please check your email (${mail}) for further instructions.` });
     });
-
-    const lotokenPromise = SecureStore.setItemAsync('lotoken', user.logout_token);
-    const tokenPromise = SecureStore.setItemAsync('token', user.csrf_token);
-    const namePromise = SecureStore.setItemAsync('username', user.current_user.name);
-    const uidPromise = SecureStore.setItemAsync('uid', user.current_user.uid);
-    Promise.all([lotokenPromise, tokenPromise, namePromise, uidPromise])
-    .then(() => NavigationService.navigate('Login'));
   };
 };
 
