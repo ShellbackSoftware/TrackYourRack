@@ -8,7 +8,7 @@
       "ios",
       "android"
     ],
-    "version": "1.0.0",
+    "version": "0.4.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -24,6 +24,9 @@
     ],
     "ios": {
       "supportsTablet": true
+    },
+    "android": {
+      "package": "com.shellbacksoftware.trackyourrack"
     },
     "description": "An app for tracking your nail polish collection",
     "githubUrl": "https://github.com/ShellbackSoftware/TrackYourRack"
