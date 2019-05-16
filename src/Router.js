@@ -19,7 +19,7 @@ import {
   ProfileScreen,
   FollowingScreen,
   ChatScreen,
-  ScannerScreen,
+  //ScannerScreen,
   EditListScreen,
   AddPolishScreen,
   AboutScreen,
@@ -35,7 +35,7 @@ const DrawerNav = createDrawerNavigator(
     Profile: ProfileScreen,
     Following: FollowingScreen,
     Chat: ChatScreen,
-    Scanner: ScannerScreen,
+    //Scanner: ScannerScreen,
     About: AboutScreen,
   },
   {

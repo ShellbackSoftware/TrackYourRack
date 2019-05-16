@@ -12,6 +12,7 @@ import {
 import { connect } from 'react-redux';
 import Autocomplete from 'react-native-autocomplete-input';
 import { ImagePicker } from 'expo';
+import ScannerWidget from '../widgets/ScannerWidget';
 import { deleteList, addSinglePolish } from '../../actions';
 import { CardSection, Button, Input, Spinner } from '../common';
 
@@ -28,7 +29,8 @@ class AddPolishScreen extends React.Component {
     pSite: '',
     pSwatch: null,
     uid: this.props.uid,
-    filename: ''
+    filename: '',
+    scanning: false
   };
 
   ontextChange(field, value) {
@@ -86,6 +88,12 @@ class AddPolishScreen extends React.Component {
     );
   }
 
+  renderWidget() {
+    return (
+      <ScannerWidget />
+    );
+  }
+
   renderError() {
     if (this.props.uploadError) {
       return (
@@ -116,6 +124,10 @@ class AddPolishScreen extends React.Component {
           <Spinner />
         </CardSection>
       );
+    }
+
+    if (this.state.scanning) {
+      return this.renderWidget();
     }
 
     const {
@@ -156,7 +168,6 @@ class AddPolishScreen extends React.Component {
             <Autocomplete
               autoCorrect={false}
               listStyle={acListStyle}
-              //listContainerStyle={{ flex: 1, zIndex: 3 }}
               // Text input container
               inputContainerStyle={acTextContainerStyle}
               style={acTextStyle}
@@ -233,6 +244,12 @@ class AddPolishScreen extends React.Component {
             onPress={() => this.pickImage()}
           >
             Upload a swatch
+          </Button>
+        </CardSection>
+
+        <CardSection>
+          <Button onPress={() => this.setState({ scanning: true })}>
+            Scan a Barcode
           </Button>
         </CardSection>
 

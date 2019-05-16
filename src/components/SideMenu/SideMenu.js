@@ -41,11 +41,11 @@ class SideMenu extends React.Component {
           Chat
         </SideMenuItem>
 
-        <SideMenuItem
+        {/*<SideMenuItem
           onPress={() => this.onItemSelect('Scanner')}
         >
           Barcode Scanner
-        </SideMenuItem>
+        </SideMenuItem>*/}
 
         <SideMenuItem
           onPress={() => this.onItemSelect('About')}
