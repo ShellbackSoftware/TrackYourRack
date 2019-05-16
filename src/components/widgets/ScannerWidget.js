@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, StyleSheet, View, Button, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import { Permissions, BarCodeScanner } from 'expo';
-
+// TODO: Continue working once I get access to a database of UPC's
 class ScannerWidget extends React.Component {
 
   state = {
@@ -34,6 +34,7 @@ class ScannerWidget extends React.Component {
       <View
         style={{
           flex: 1,
+          justifyContent: 'flex-end',
           width: Dimensions.get('window').width,
           height: Dimensions.get('window').height,
           zIndex: 999
@@ -58,11 +59,11 @@ class ScannerWidget extends React.Component {
 
 }
 
-const styles = StyleSheet.create({
+/*const styles = StyleSheet.create({
   containerStyle: {
     flex: 1
   }
-});
+});*/
 
 const mapStateToProps = state => {
   const { username, error, loading, uid, token } = state.auth;
