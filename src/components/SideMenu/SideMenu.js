@@ -42,12 +42,6 @@ class SideMenu extends React.Component {
         </SideMenuItem>
 
         <SideMenuItem
-          onPress={() => this.onItemSelect('Scanner')}
-        >
-          Barcode Scanner
-        </SideMenuItem>
-
-        <SideMenuItem
           onPress={() => this.onItemSelect('About')}
         >
           About
